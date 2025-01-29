@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:adwis_frontend/pages/onboarding/sub_pages/template_page.dart';
+import 'package:adwis_frontend/pages/onboarding/main_onboarding.dart';
 
 void main() {
   runApp(MainApp());
@@ -13,8 +13,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'Adwis',
       home: Scaffold(
-        body: Container(
-            padding: EdgeInsets.all(6), child: TemplatePage(type: 'purpose')),
+        body: Container(padding: EdgeInsets.all(6), child: MainOnboarding()),
       ),
     );
   }
