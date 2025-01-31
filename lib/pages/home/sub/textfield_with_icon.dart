@@ -6,7 +6,13 @@ class TextFieldWithIcon extends StatelessWidget {
 
   String _text = '';
 
+  final textField = TextEditingController();
+
   final Function returnText;
+
+  void clearText() {
+    textField.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +35,7 @@ class TextFieldWithIcon extends StatelessWidget {
             ),
             maxLines: null,
             keyboardType: TextInputType.multiline,
+            controller: textField,
           ),
         ),
         IconButton(
@@ -39,6 +46,7 @@ class TextFieldWithIcon extends StatelessWidget {
           ),
           onPressed: () {
             returnText(_text);
+            clearText();
           },
         ),
       ],
