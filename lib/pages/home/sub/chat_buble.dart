@@ -8,11 +8,13 @@ class ChatBuble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double c_width = MediaQuery.of(context).size.width * 0.6;
     return Row(
       mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
       children: [
         Container(
+          width: c_width,
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           margin: EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
