@@ -23,26 +23,43 @@ class _OverlayLogoState extends State<OverlayLogo> {
   void _showOverlay() {
     _overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
-        top: 30, // Adjust as needed
-        left: MediaQuery.of(context).size.width / 2 - 54,
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromRGBO(254, 254, 254, 1),
-                Color.fromRGBO(254, 254, 254, 0),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+        top: 0, // Adjust as needed
+        left: 0,
+        right: 0,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: 10),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(252, 254, 255, 1),
+              ),
+              child: SvgPicture.asset(
+                "assets/icons/logo_text.svg",
+                width: 109,
+                height: 45,
+                fit: BoxFit.contain,
+                colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
+              ),
             ),
-          ),
-          child: SvgPicture.asset(
-            "assets/icons/logo_text.svg",
-            width: 109,
-            height: 45,
-            fit: BoxFit.contain,
-            colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
-          ),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromRGBO(252, 254, 255, 1),
+                    Color.fromRGBO(252, 254, 255, 0),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+              child: SizedBox(
+                width: 10,
+                height: 20,
+              ),
+            )
+          ],
         ),
       ),
     );
