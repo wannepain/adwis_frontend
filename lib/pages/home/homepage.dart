@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:adwis_frontend/pages/home/sub/chat_buble.dart';
 import 'package:adwis_frontend/pages/home/sub/text_input.dart';
-// import 'package:http/http.dart' as http;
+import 'package:adwis_frontend/pages/home/sub/overlay_logo.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:adwis_frontend/utils/loader_center.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -62,7 +64,7 @@ class _HomepageState extends State<Homepage> {
       print("history: $history");
       print("used idxs: $usedQuestionIdx");
       final response = await dio.post(
-          "https://8e26-45-84-122-28.ngrok-free.app/respond",
+          "https://918a-45-84-122-28.ngrok-free.app/respond",
           data: {"history": history, "used_question_idx": usedQuestionIdx});
 
       return {
@@ -85,6 +87,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(252, 254, 255, 1),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 18),
         child: Column(
@@ -96,7 +99,7 @@ class _HomepageState extends State<Homepage> {
                 itemCount: history.isEmpty ? 1 : history.length,
                 itemBuilder: (context, index) {
                   if (history.isEmpty) {
-                    return ChatBuble(text: "No history", isMe: true);
+                    return LoaderCenter();
                   }
 
                   String bot = history[index]['bot']['Question_Text'] ?? "";
@@ -117,7 +120,8 @@ class _HomepageState extends State<Homepage> {
                 },
               ),
             ),
-            TextInput(returnText: returnText)
+            TextInput(returnText: returnText),
+            OverlayLogo(),
           ],
         ),
       ),
