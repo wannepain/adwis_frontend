@@ -15,7 +15,7 @@ class MainApp extends StatelessWidget {
   void testHttp() async {
     try {
       final response =
-          await dio.get("https://8e26-45-84-122-28.ngrok-free.app");
+          await dio.get("https://918a-45-84-122-28.ngrok-free.app");
       print(response);
     } catch (e) {
       print(e);
