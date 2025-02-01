@@ -1,5 +1,6 @@
 //import 'package:adwis_frontend/pages/home/homepage.dart';
 import 'package:adwis_frontend/pages/home/homepage.dart';
+import 'package:adwis_frontend/pages/onboarding/main_onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 // import 'package:adwis_frontend/pages/onboarding/main_onboarding.dart';
@@ -29,7 +30,7 @@ class MainApp extends StatelessWidget {
       home: Scaffold(
         body: Container(
           padding: EdgeInsets.all(6),
-          child: Homepage(),
+          child: MainOnboarding(),
         ),
       ),
     );
