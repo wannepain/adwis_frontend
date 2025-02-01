@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:adwis_frontend/pages/home/sub/chat_buble.dart';
 import 'package:adwis_frontend/pages/home/sub/text_input.dart';
 import 'package:adwis_frontend/pages/home/sub/overlay_logo.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:adwis_frontend/utils/loader_center.dart';
 
 class Homepage extends StatefulWidget {
