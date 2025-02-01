@@ -47,6 +47,9 @@ class _HomepageState extends State<Homepage> {
   }
 
   void setData() async {
+    // if (history.length > 10) {
+    //   // request evaluation, show eval card
+    // } else {
     Map result = await postHttp();
     print(result);
     setState(() {
@@ -56,6 +59,7 @@ class _HomepageState extends State<Homepage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToBottom();
     });
+    // }
   }
 
   Future<Map> postHttp() async {
