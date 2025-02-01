@@ -14,9 +14,26 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   final dio = Dio();
+  final ScrollController _scrollController = ScrollController();
 
   List history = [];
   List usedQuestionIdx = [];
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
 
   void returnText(String text) {
     if (history.isEmpty) {
@@ -34,6 +51,9 @@ class _HomepageState extends State<Homepage> {
     setState(() {
       history = result["history"] ?? [];
       usedQuestionIdx = result["usedQuestionIdx"] ?? [];
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToBottom();
     });
   }
 
@@ -71,6 +91,7 @@ class _HomepageState extends State<Homepage> {
           children: [
             Flexible(
               child: ListView.builder(
+                controller: _scrollController,
                 padding: EdgeInsets.symmetric(vertical: 18.0),
                 itemCount: history.isEmpty ? 1 : history.length,
                 itemBuilder: (context, index) {
