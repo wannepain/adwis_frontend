@@ -14,9 +14,11 @@ class ChatBuble extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         Container(
-          width: c_width,
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          margin: EdgeInsets.symmetric(vertical: 10),
+          constraints: BoxConstraints(
+            maxWidth: c_width, // Limit max width
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(9)),
             color: isMe
@@ -33,11 +35,14 @@ class ChatBuble extends StatelessWidget {
               ),
             ],
           ),
-          child: Text(
-            text,
-            style: TextStyle(fontSize: 16),
+          child: IntrinsicWidth(
+            child: Text(
+              text,
+              style: TextStyle(fontSize: 16),
+              textAlign: isMe ? TextAlign.end : TextAlign.start,
+            ),
           ),
-        )
+        ),
       ],
     );
   }
