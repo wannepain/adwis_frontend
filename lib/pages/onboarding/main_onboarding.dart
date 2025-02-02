@@ -39,8 +39,6 @@ class _MainOnboardingState extends State<MainOnboarding> {
 
   @override
   Widget build(BuildContext context) {
-    print('Current Page: $currentPage'); // Debug print
-
     if (currentPage == 1) {
       return TemplatePage(type: "purpose");
     } else if (currentPage == 2) {
