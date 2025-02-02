@@ -18,19 +18,18 @@ class _CareerCardState extends State<CareerCard> {
 
   List data = [];
 
-  var salary;
+  String salary = "";
 
-  var title;
+  String title = "";
 
-  var description;
+  String description = "";
 
   Future<Map> postHttp() async {
     try {
       final response = await dio.post(
-          "https://4615-45-84-122-21.ngrok-free.app/respond",
+          "https://4615-45-84-122-21.ngrok-free.app/career",
           data: {"history": widget.history});
-
-      return jsonDecode(response.data);
+      return jsonDecode(response.data)["career"];
     } catch (e) {
       print('Error: $e');
       return {"history": null, "usedQuestionIdx": null, "error": e};
@@ -40,9 +39,12 @@ class _CareerCardState extends State<CareerCard> {
   void setData() async {
     final response = await postHttp();
     data.add(response);
-    salary = response["Starting_Salary"];
-    title = response["Career_Name"];
-    description = response["Description"];
+    final startingSalary = response["Starting_Salary"];
+    setState(() {
+      salary = "$startingSalary";
+      title = response["Career_Name"];
+      description = response["Description"];
+    });
   }
 
   @override
@@ -96,7 +98,7 @@ class _CareerCardState extends State<CareerCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              title ?? "Career Card",
+                              title,
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: Color.fromRGBO(252, 254, 255, 1),
@@ -109,7 +111,7 @@ class _CareerCardState extends State<CareerCard> {
                               height: 6,
                             ),
                             Text(
-                              description ?? "Description",
+                              description,
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 fontSize: 12,
@@ -125,7 +127,7 @@ class _CareerCardState extends State<CareerCard> {
                         width: (c_width - 20) / 3,
                         alignment: Alignment.center,
                         child: Text(
-                          salary ? "\$$salary" : "salary",
+                          "\$$salary",
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w800,
