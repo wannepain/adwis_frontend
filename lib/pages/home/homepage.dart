@@ -67,7 +67,7 @@ class _HomepageState extends State<Homepage> {
       print("history: $history");
       print("used idxs: $usedQuestionIdx");
       final response = await dio.post(
-          "https://918a-45-84-122-28.ngrok-free.app/respond",
+          "https://4615-45-84-122-21.ngrok-free.app/respond",
           data: {"history": history, "used_question_idx": usedQuestionIdx});
 
       return {
