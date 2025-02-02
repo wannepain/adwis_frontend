@@ -69,6 +69,8 @@ flutter:
     - assets/illustrations/clarity_illustration.svg
     - assets/illustrations/confident_illustration.svg
     - assets/illustrations/purpose_illustration.svg
+    #- assets/images/degree_1.jpg
+    - assets/images/degree_2.jpg
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
