@@ -1,16 +1,55 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:dio/dio.dart';
 
-class CareerCard extends StatelessWidget {
-  final title;
-  final description;
-  final salary;
+class CareerCard extends StatefulWidget {
+  List history;
 
-  const CareerCard(
-      {super.key,
-      required this.title,
-      required this.description,
-      required this.salary});
+  CareerCard({super.key, required this.history});
+
+  @override
+  State<CareerCard> createState() => _CareerCardState();
+}
+
+class _CareerCardState extends State<CareerCard> {
+  final dio = Dio();
+
+  List data = [];
+
+  var salary;
+
+  var title;
+
+  var description;
+
+  Future<Map> postHttp() async {
+    try {
+      final response = await dio.post(
+          "https://4615-45-84-122-21.ngrok-free.app/respond",
+          data: {"history": widget.history});
+
+      return jsonDecode(response.data);
+    } catch (e) {
+      print('Error: $e');
+      return {"history": null, "usedQuestionIdx": null, "error": e};
+    }
+  }
+
+  void setData() async {
+    final response = await postHttp();
+    data.add(response);
+    salary = response["Starting_Salary"];
+    title = response["Career_Name"];
+    description = response["Description"];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +96,7 @@ class CareerCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              title,
+                              title ?? "Career Card",
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: Color.fromRGBO(252, 254, 255, 1),
@@ -70,7 +109,7 @@ class CareerCard extends StatelessWidget {
                               height: 6,
                             ),
                             Text(
-                              description,
+                              description ?? "Description",
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 fontSize: 12,
@@ -86,7 +125,7 @@ class CareerCard extends StatelessWidget {
                         width: (c_width - 20) / 3,
                         alignment: Alignment.center,
                         child: Text(
-                          "\$$salary",
+                          salary ? "\$$salary" : "salary",
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w800,
