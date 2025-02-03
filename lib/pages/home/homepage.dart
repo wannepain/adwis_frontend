@@ -5,6 +5,8 @@ import 'package:adwis_frontend/pages/home/sub/chat_buble.dart';
 import 'package:adwis_frontend/pages/home/sub/text_input.dart';
 import 'package:adwis_frontend/pages/home/sub/overlay_logo.dart';
 import 'package:adwis_frontend/utils/loader_center.dart';
+import 'package:adwis_frontend/pages/home/sub/career/career_card.dart';
+import 'package:adwis_frontend/pages/home/sub/career/restart_conv_button.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -14,7 +16,9 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  //fix Bad state: No Element error
   final dio = Dio();
+  final url = "https://361c-45-84-122-5.ngrok-free.app";
   final ScrollController _scrollController = ScrollController();
 
   List history = [];
@@ -46,28 +50,35 @@ class _HomepageState extends State<Homepage> {
     setData();
   }
 
-  void setData() async {
-    // if (history.length > 10) {
-    //   // request evaluation, show eval card
-    // } else {
-    Map result = await postHttp();
-    print(result);
+  void restartConversation() {
     setState(() {
-      history = result["history"] ?? [];
-      usedQuestionIdx = result["usedQuestionIdx"] ?? [];
+      history = [];
+      usedQuestionIdx = [];
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToBottom();
-    });
-    // }
+    setData();
+  }
+
+  void setData() async {
+    if (history.length > 1) {
+      //logic here is that there will be a special last log appended to history]
+      history.add({"end": true});
+    } else {
+      Map result = await postHttp();
+      setState(() {
+        history = result["history"] ?? [];
+        usedQuestionIdx = result["usedQuestionIdx"] ?? [];
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToBottom();
+      });
+    }
   }
 
   Future<Map> postHttp() async {
     try {
       print("history: $history");
       print("used idxs: $usedQuestionIdx");
-      final response = await dio.post(
-          "https://4615-45-84-122-21.ngrok-free.app/respond",
+      final response = await dio.post("$url/respond",
           data: {"history": history, "used_question_idx": usedQuestionIdx});
 
       return {
@@ -99,14 +110,21 @@ class _HomepageState extends State<Homepage> {
               child: ListView.builder(
                 controller: _scrollController,
                 padding: EdgeInsets.symmetric(vertical: 18.0),
-                itemCount: history.isEmpty ? 1 : history.length,
+                itemCount: history.isNotEmpty && history.last["end"] == true
+                    ? history.length + 1 // Extra item for CareerCard
+                    : history.length,
                 itemBuilder: (context, index) {
-                  if (history.isEmpty) {
-                    return LoaderCenter();
+                  // If this is the last item and history.last["end"] == true, show CareerCard
+                  if (index == history.length && history.last["end"] == true) {
+                    return CareerCard(
+                        history: history.sublist(0, history.length - 1));
                   }
 
-                  String bot = history[index]['bot']['Question_Text'] ?? "";
-                  String client = history[index]['client'] ?? "";
+                  // Normal chat bubbles
+                  var bot = history[index]['bot'] == null
+                      ? ""
+                      : history[index]['bot']['Question_Text'];
+                  var client = history[index]['client'] ?? "";
 
                   List<Widget> toReturn = [];
                   if (bot.isNotEmpty) {
@@ -123,7 +141,10 @@ class _HomepageState extends State<Homepage> {
                 },
               ),
             ),
-            TextInput(returnText: returnText),
+            // Restart button OR text input below CareerCard
+            history.isNotEmpty && history.last["end"] == true
+                ? RestartConvButton(restart: restartConversation)
+                : TextInput(returnText: returnText),
             OverlayLogo(),
           ],
         ),
