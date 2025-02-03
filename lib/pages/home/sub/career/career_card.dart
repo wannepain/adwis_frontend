@@ -1,11 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dio/dio.dart';
 
 class CareerCard extends StatefulWidget {
-  List history;
+  final List history;
 
   CareerCard({super.key, required this.history});
 
@@ -15,15 +14,14 @@ class CareerCard extends StatefulWidget {
 
 class _CareerCardState extends State<CareerCard> {
   final dio = Dio();
-  final url = "https://361c-45-84-122-5.ngrok-free.app";
+  final String url = "https://361c-45-84-122-5.ngrok-free.app";
 
   List data = [];
-
   String salary = "";
-
   String title = "";
-
   String description = "";
+
+  double opacityLevel = 0.0; // Start hidden
 
   Future<Map> postHttp() async {
     try {
@@ -40,10 +38,18 @@ class _CareerCardState extends State<CareerCard> {
     final response = await postHttp();
     data.add(response);
     final startingSalary = response["Starting_Salary"];
+
     setState(() {
       salary = "$startingSalary";
       title = response["Career_Name"];
       description = response["Description"];
+    });
+
+    // Delay animation slightly to allow UI build
+    Future.delayed(Duration(milliseconds: 200), () {
+      setState(() {
+        opacityLevel = 1.0;
+      });
     });
   }
 
@@ -59,88 +65,87 @@ class _CareerCardState extends State<CareerCard> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          width: c_width,
-          padding: EdgeInsets.all(10),
-          margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(9)),
-            // border: Border.all(color: Colors.black, width: 2.0)
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromRGBO(143, 198, 238, 0.5),
-                offset: Offset(0, 0),
-                blurRadius: 10,
-                spreadRadius: 0,
-              ),
-            ],
-            image: DecorationImage(
-              image: AssetImage("assets/images/degree_2.jpg"),
-              colorFilter: ColorFilter.mode(
-                Colors.black.withAlpha(100),
-                BlendMode.srcATop,
-              ),
-              fit: BoxFit.cover, // Ensures the image covers the container
-            ),
-          ),
-          child: IntrinsicHeight(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 200,
-                ),
-                IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: ((c_width - 20) / 3) * 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                color: Color.fromRGBO(252, 254, 255, 1),
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: GoogleFonts.inter().fontFamily,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              description,
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w300,
-                                color: Color.fromRGBO(252, 254, 255, 0.7),
-                                fontFamily: GoogleFonts.inter().fontFamily,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: (c_width - 20) / 3,
-                        alignment: Alignment.center,
-                        child: Text(
-                          "\$$salary",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w800,
-                            color: Color.fromRGBO(252, 254, 255, 1),
-                            fontFamily: GoogleFonts.inter().fontFamily,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+        AnimatedOpacity(
+          duration: Duration(milliseconds: 300),
+          opacity: opacityLevel,
+          child: Container(
+            width: c_width,
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(9)),
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromRGBO(143, 198, 238, 0.5),
+                  offset: Offset(0, 0),
+                  blurRadius: 10,
+                  spreadRadius: 0,
                 ),
               ],
+              image: DecorationImage(
+                image: AssetImage("assets/images/degree_2.jpg"),
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withAlpha(100),
+                  BlendMode.srcATop,
+                ),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: IntrinsicHeight(
+              child: Column(
+                children: [
+                  SizedBox(height: 200),
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: ((c_width - 20) / 3) * 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                title,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: Color.fromRGBO(252, 254, 255, 1),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: GoogleFonts.inter().fontFamily,
+                                ),
+                              ),
+                              SizedBox(height: 6),
+                              Text(
+                                description,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w300,
+                                  color: Color.fromRGBO(252, 254, 255, 0.7),
+                                  fontFamily: GoogleFonts.inter().fontFamily,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: (c_width - 20) / 3,
+                          alignment: Alignment.center,
+                          child: Text(
+                            "\$$salary",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800,
+                              color: Color.fromRGBO(252, 254, 255, 1),
+                              fontFamily: GoogleFonts.inter().fontFamily,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
