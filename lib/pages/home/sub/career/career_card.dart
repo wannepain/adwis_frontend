@@ -15,6 +15,7 @@ class CareerCard extends StatefulWidget {
 
 class _CareerCardState extends State<CareerCard> {
   final dio = Dio();
+  final url = "https://361c-45-84-122-5.ngrok-free.app";
 
   List data = [];
 
@@ -26,9 +27,8 @@ class _CareerCardState extends State<CareerCard> {
 
   Future<Map> postHttp() async {
     try {
-      final response = await dio.post(
-          "https://4615-45-84-122-21.ngrok-free.app/career",
-          data: {"history": widget.history});
+      final response =
+          await dio.post("$url/career", data: {"history": widget.history});
       return jsonDecode(response.data)["career"];
     } catch (e) {
       print('Error: $e');
@@ -57,6 +57,7 @@ class _CareerCardState extends State<CareerCard> {
   Widget build(BuildContext context) {
     double c_width = MediaQuery.of(context).size.width * 0.6;
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           width: c_width,
