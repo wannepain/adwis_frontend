@@ -1,7 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:dio/dio.dart';
+import 'package:adwis_frontend/services/api_service.dart';
 
 class CareerCard extends StatefulWidget {
   final List history;
@@ -13,8 +12,9 @@ class CareerCard extends StatefulWidget {
 }
 
 class _CareerCardState extends State<CareerCard> {
-  final dio = Dio();
-  final String url = "https://f500-45-84-122-5.ngrok-free.app";
+  final ApiService apiService = ApiService(
+    url: "https://145e-45-84-122-3.ngrok-free.app",
+  );
 
   List data = [];
   String salary = "";
@@ -23,19 +23,10 @@ class _CareerCardState extends State<CareerCard> {
 
   double opacityLevel = 0.0; // Start hidden
 
-  Future<Map> postHttp() async {
-    try {
-      final response =
-          await dio.post("$url/career", data: {"history": widget.history});
-      return jsonDecode(response.data)["career"];
-    } catch (e) {
-      print('Error: $e');
-      return {"history": null, "usedQuestionIdx": null, "error": e};
-    }
-  }
-
   void setData() async {
-    final response = await postHttp();
+    final response = await apiService.getCareer(
+      history: widget.history,
+    );
     data.add(response);
     final startingSalary = response["Starting_Salary"];
 
