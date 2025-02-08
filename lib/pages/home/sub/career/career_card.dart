@@ -14,7 +14,7 @@ class CareerCard extends StatefulWidget {
 
 class _CareerCardState extends State<CareerCard> {
   final dio = Dio();
-  final String url = "https://361c-45-84-122-5.ngrok-free.app";
+  final String url = "https://f500-45-84-122-5.ngrok-free.app";
 
   List data = [];
   String salary = "";

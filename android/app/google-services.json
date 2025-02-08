@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "563539782861",
+    "project_id": "adwis-2008",
+    "storage_bucket": "adwis-2008.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:563539782861:android:4a793145fd194b776d4d84",
+        "android_client_info": {
+          "package_name": "com.example.adwis_frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZXA9oCVxnLnL9JVXHfm5CMF5ktNH9sD4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,15 @@
 import 'package:adwis_frontend/pages/onboarding/main_onboarding.dart';
 import 'package:flutter/material.dart';
+// import 'package:adwis_frontend/pages/auth/auth_card_overlay.dart';
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MainApp());
 }
 
