@@ -1,26 +1,29 @@
+import 'package:adwis_frontend/providers/auth_providers.dart';
 import 'package:flutter/material.dart';
-import 'package:adwis_frontend/services/auth_service.dart';
 import 'package:adwis_frontend/pages/auth/utils/sign_up_card.dart';
 import 'package:adwis_frontend/pages/auth/utils/account_button.dart';
 import 'package:adwis_frontend/services/api_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AuthCardOverlay extends StatefulWidget {
+class AuthCardOverlay extends ConsumerStatefulWidget {
   const AuthCardOverlay({super.key});
 
   @override
-  State<AuthCardOverlay> createState() => _AuthCardOverlayState();
+  ConsumerState<AuthCardOverlay> createState() => _AuthCardOverlayState();
 }
 
-class _AuthCardOverlayState extends State<AuthCardOverlay> {
+class _AuthCardOverlayState extends ConsumerState<AuthCardOverlay> {
   bool isOpen = false;
-  final ApiService authService = ApiService(
-    url: "https://145e-45-84-122-3.ngrok-free.app",
-  );
+  bool isUnlimited = false;
+  String userImgUrl = "";
+  final ApiService apiService = ApiService();
 
-  void onTap() async {
-    final userCredential = await AuthService().signInWithGoogle();
-    final result = await authService.signUp(user: userCredential.user);
-    print(result);
+  void signUpLogic() async {
+    ref.read(authProvider.notifier).signIn();
+  }
+
+  void onTap() {
+    signUpLogic();
   }
 
   void close() {
@@ -31,13 +34,21 @@ class _AuthCardOverlayState extends State<AuthCardOverlay> {
 
   @override
   Widget build(BuildContext context) {
+    final data = ref.watch(authProvider);
     return Stack(
       children: [
         isOpen
-            ? SignUpCard(
-                close: close,
-                onTap: onTap,
-              )
+            ? data["isSignedIn"] == false
+                ? SignUpCard(
+                    close: close,
+                    onTap: onTap,
+                  )
+                : Positioned(
+                    //implement user managment screen
+                    top: 200,
+                    left: 100,
+                    child: Text("User is signed in"),
+                  )
             : AccountButton(
                 close: close,
               ),
