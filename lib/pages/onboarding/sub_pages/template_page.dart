@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:adwis_frontend/utils/action_button.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:adwis_frontend/pages/home/homepage.dart';
 
 class TemplatePage extends StatelessWidget {
   const TemplatePage({super.key, required this.type});
