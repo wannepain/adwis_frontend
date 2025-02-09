@@ -12,9 +12,7 @@ class CareerCard extends StatefulWidget {
 }
 
 class _CareerCardState extends State<CareerCard> {
-  final ApiService apiService = ApiService(
-    url: "https://145e-45-84-122-3.ngrok-free.app",
-  );
+  final ApiService apiService = ApiService();
 
   List data = [];
   String salary = "";
@@ -32,8 +30,8 @@ class _CareerCardState extends State<CareerCard> {
 
     setState(() {
       salary = "$startingSalary";
-      title = response["Career_Name"];
-      description = response["Description"];
+      title = response["Career_Name"] ?? "";
+      description = response["Description"] ?? "";
     });
 
     // Delay animation slightly to allow UI build
