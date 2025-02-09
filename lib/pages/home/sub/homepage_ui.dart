@@ -21,7 +21,14 @@ class HomepageUi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    if (history.isEmpty) {
+      return Scaffold(
+        backgroundColor: Color.fromRGBO(252, 254, 255, 1),
+        body: Center(
+          child: LoaderCenter(),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: Color.fromRGBO(252, 254, 255, 1),
       body: Container(
@@ -32,16 +39,21 @@ class HomepageUi extends StatelessWidget {
               child: ListView.builder(
                 controller: scrollController,
                 padding: EdgeInsets.symmetric(vertical: 18.0),
-                itemCount: history.isEmpty ? 1 : history.length,
+                itemCount: history.isNotEmpty && history.last["end"] == true
+                    ? history.length + 1 // Extra item for CareerCard
+                    : history.length,
                 itemBuilder: (context, index) {
-                  if (history.isEmpty) {
-                    return LoaderCenter();
+                  // If this is the last item and history.last["end"] == true, show CareerCard
+                  if (index == history.length && history.last["end"] == true) {
+                    return CareerCard(
+                        history: history.sublist(0, history.length - 1));
                   }
 
+                  // Normal chat bubbles
                   var bot = history[index]['bot'] == null
                       ? ""
                       : history[index]['bot']['Question_Text'];
-                  var client = history[index]['client'];
+                  var client = history[index]['client'] ?? "";
 
                   List<Widget> toReturn = [];
                   if (bot.isNotEmpty) {
@@ -49,10 +61,6 @@ class HomepageUi extends StatelessWidget {
                   }
                   if (client.isNotEmpty) {
                     toReturn.add(ChatBuble(text: client, isMe: true));
-                  }
-                  if (history.last["end"] == true) {
-                    List historyCopy = history.sublist(0, history.length - 1);
-                    toReturn.add(CareerCard(history: historyCopy));
                   }
 
                   return Padding(
@@ -62,6 +70,7 @@ class HomepageUi extends StatelessWidget {
                 },
               ),
             ),
+            // Restart button OR text input below CareerCard
             history.isNotEmpty && history.last["end"] == true
                 ? RestartConvButton(restart: restartConversation)
                 : TextInput(returnText: returnText),
