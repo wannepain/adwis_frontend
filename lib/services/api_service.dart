@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
-import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ApiService {
-  final String url;
+  final String url = "https://edf9-45-84-122-5.ngrok-free.app";
 
-  ApiService({required this.url});
+  ApiService();
 
   final dio = Dio();
 
@@ -15,8 +15,8 @@ class ApiService {
           data: {"history": history, "used_question_idx": usedQuestionIdx});
 
       return {
-        "history": jsonDecode(response.data)['history'],
-        "usedQuestionIdx": jsonDecode(response.data)['used_question_idx'],
+        "history": response.data['history'],
+        "usedQuestionIdx": response.data['used_question_idx'],
         "error": false,
       };
     } catch (e) {
@@ -29,7 +29,7 @@ class ApiService {
     try {
       final response =
           await dio.post("$url/career", data: {"history": history});
-      return jsonDecode(response.data)["career"];
+      return response.data["career"];
     } catch (e) {
       print('Error: $e');
       return {"history": null, "usedQuestionIdx": null, "error": e};
@@ -38,11 +38,21 @@ class ApiService {
 
   Future<Map> signUp({required user}) async {
     try {
+      final email = user!.email;
+      final uid = user.uid;
+      final name = user.displayName as String;
+
       final result = await dio.post(
         "$url/api/sign",
-        data: {"user": user},
+        data: {
+          "user": {
+            "uid": uid,
+            "name": name,
+            "email": email,
+          },
+        },
       );
-      return jsonDecode(result.data);
+      return result.data;
     } catch (e) {
       return {"error": e, "success": false};
     }
