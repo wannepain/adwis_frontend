@@ -134,11 +134,7 @@ class TemplatePage extends StatelessWidget {
           ),
           ActionButton(
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Homepage(),
-                  ));
+              Navigator.pushNamed(context, "/homepage");
             },
             text: buttonText,
           ),
