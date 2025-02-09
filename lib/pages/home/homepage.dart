@@ -13,9 +13,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   //final dio = Dio();
   final ScrollController _scrollController = ScrollController();
-  final apiService = ApiService(
-    url: "https://145e-45-84-122-3.ngrok-free.app",
-  );
+  final apiService = ApiService();
 
   List history = [];
   List usedQuestionIdx = [];
@@ -62,6 +60,7 @@ class _HomepageState extends State<Homepage> {
         history: history,
         usedQuestionIdx: usedQuestionIdx,
       );
+      print("result in history \n $result");
       setState(() {
         history = result["history"] ?? [];
         usedQuestionIdx = result["usedQuestionIdx"] ?? [];
@@ -80,17 +79,22 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: HomepageUi(
-              scrollController: _scrollController,
-              history: history,
-              restartConversation: restartConversation,
-              returnText: returnText),
+    return Scaffold(
+      body: Container(
+        padding: EdgeInsets.all(6),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: HomepageUi(
+                  scrollController: _scrollController,
+                  history: history,
+                  restartConversation: restartConversation,
+                  returnText: returnText),
+            ),
+            AuthCardOverlay(),
+          ],
         ),
-        AuthCardOverlay(),
-      ],
+      ),
     );
   }
 }
