@@ -16,6 +16,7 @@ class _AuthCardOverlayState extends ConsumerState<AuthCardOverlay> {
   bool isOpen = false;
   bool isUnlimited = false;
   String userImgUrl = "";
+  bool _hasNavigated = false;
   final ApiService apiService = ApiService();
 
   void signUpLogic() async {
@@ -35,20 +36,25 @@ class _AuthCardOverlayState extends ConsumerState<AuthCardOverlay> {
   @override
   Widget build(BuildContext context) {
     final data = ref.watch(authProvider);
+
+    if (isOpen && data["isSignedIn"] && !_hasNavigated) {
+      _hasNavigated = true; // Set flag to prevent infinite loop
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, "/account").then((onReturn) {
+            _hasNavigated = false;
+          });
+        }
+      });
+    }
+
     return Stack(
       children: [
         isOpen
-            ? data["isSignedIn"] == false
-                ? SignUpCard(
-                    close: close,
-                    onTap: onTap,
-                  )
-                : Positioned(
-                    //implement user managment screen
-                    top: 200,
-                    left: 100,
-                    child: Text("User is signed in"),
-                  )
+            ? SignUpCard(
+                close: close,
+                onTap: onTap,
+              )
             : AccountButton(
                 close: close,
               ),
