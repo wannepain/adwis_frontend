@@ -170,8 +170,8 @@ class AuthService {
     if (user == null) {
       return {
         "isUnlimited": false,
-        "userImage": false,
-        "isSignedIn": true,
+        "userImage": "",
+        "isSignedIn": false,
       };
     }
 
@@ -187,8 +187,13 @@ class AuthService {
   }
 
   // Sign out the user
-  Future<void> signOut() async {
+  Future<Map> signOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
+    return {
+      "isUnlimited": false,
+      "userImage": "",
+      "isSignedIn": false,
+    };
   }
 }
