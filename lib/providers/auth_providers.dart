@@ -7,7 +7,7 @@ class AuthNotifier extends StateNotifier<Map> {
           //sets initial data
           {
             "isUnlimited": false,
-            "userImage": false,
+            "userImage": "",
             "isSignedIn": false,
           },
         );
@@ -18,6 +18,11 @@ class AuthNotifier extends StateNotifier<Map> {
 
   void signIn() async {
     final result = await AuthService().signIn();
+    state = result;
+  }
+
+  void signOut() async {
+    final result = await AuthService().signOut();
     state = result;
   }
 }
