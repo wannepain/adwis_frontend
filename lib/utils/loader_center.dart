@@ -26,11 +26,9 @@ class _LoaderCenter extends State<LoaderCenter> {
         left: 0,
         right: 0,
         bottom: 0,
-        child: Expanded(
-          child: Center(
-            child: LoadingAnimationWidget.inkDrop(
-                color: Color.fromRGBO(51, 101, 138, 1), size: 50),
-          ),
+        child: Center(
+          child: LoadingAnimationWidget.inkDrop(
+              color: Color.fromRGBO(51, 101, 138, 1), size: 50),
         ),
       ),
     );
