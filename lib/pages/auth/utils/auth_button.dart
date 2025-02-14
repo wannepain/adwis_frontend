@@ -13,7 +13,9 @@ class AuthButton extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           GestureDetector(
-            onTap: onTap(),
+            onTap: () {
+              onTap();
+            },
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(9)),
