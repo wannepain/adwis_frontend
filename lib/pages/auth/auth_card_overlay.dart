@@ -6,7 +6,10 @@ import 'package:adwis_frontend/services/api_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthCardOverlay extends ConsumerStatefulWidget {
-  const AuthCardOverlay({super.key});
+  final bool forceOpen;
+  final bool navigateAfter;
+  const AuthCardOverlay(
+      {super.key, this.forceOpen = false, this.navigateAfter = false});
 
   @override
   ConsumerState<AuthCardOverlay> createState() => _AuthCardOverlayState();
@@ -20,7 +23,10 @@ class _AuthCardOverlayState extends ConsumerState<AuthCardOverlay> {
   final ApiService apiService = ApiService();
 
   void signUpLogic() async {
-    ref.read(authProvider.notifier).signIn();
+    await ref.read(authProvider.notifier).signIn();
+    if (widget.navigateAfter) {
+      Navigator.pushReplacementNamed(context, "/unlimited");
+    }
   }
 
   void onTap() {
@@ -34,10 +40,20 @@ class _AuthCardOverlayState extends ConsumerState<AuthCardOverlay> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isOpen = widget.forceOpen;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final data = ref.watch(authProvider);
 
-    if (isOpen && data["isSignedIn"] && !_hasNavigated) {
+    if (isOpen &&
+        data["isSignedIn"] &&
+        !_hasNavigated &&
+        !widget.navigateAfter) {
       _hasNavigated = true; // Set flag to prevent infinite loop
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
