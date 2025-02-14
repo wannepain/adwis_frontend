@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/sub/homepage_ui.dart';
 import 'package:adwis_frontend/pages/auth/auth_card_overlay.dart';
-import 'package:adwis_frontend/services/api_service.dart';
+import 'package:adwis_frontend/services/chatbot_service.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+  bool forceOpenAuth;
+  Homepage({super.key, this.forceOpenAuth = false});
 
   @override
   _HomepageState createState() => _HomepageState();
@@ -13,8 +14,6 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   //final dio = Dio();
   final ScrollController _scrollController = ScrollController();
-  final apiService = ApiService();
-
   List history = [];
   List usedQuestionIdx = [];
 
@@ -56,7 +55,7 @@ class _HomepageState extends State<Homepage> {
     if (history.length > 1) {
       history.add({"end": true});
     } else {
-      Map result = await apiService.chatbotRespond(
+      Map result = await ChatbotService().chatbotRespond(
         history: history,
         usedQuestionIdx: usedQuestionIdx,
       );
@@ -91,7 +90,22 @@ class _HomepageState extends State<Homepage> {
                   restartConversation: restartConversation,
                   returnText: returnText),
             ),
-            AuthCardOverlay(),
+            AuthCardOverlay(
+              forceOpen: widget.forceOpenAuth,
+              navigateAfter: widget.forceOpenAuth,
+            ),
+            Positioned(
+              top: 200,
+              left: 100,
+              child: TextButton(
+                onPressed: () {
+                  setState(() {
+                    Navigator.pushReplacementNamed(context, "/unlimited");
+                  });
+                },
+                child: Text("show overlay"),
+              ),
+            ),
           ],
         ),
       ),
