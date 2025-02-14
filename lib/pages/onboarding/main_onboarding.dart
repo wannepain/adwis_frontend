@@ -40,26 +40,11 @@ class _MainOnboardingState extends State<MainOnboarding> {
   @override
   Widget build(BuildContext context) {
     if (currentPage == 1) {
-      return Scaffold(
-        body: Container(
-          padding: EdgeInsets.all(6),
-          child: TemplatePage(type: "purpose"),
-        ),
-      );
+      return TemplatePage(type: "purpose");
     } else if (currentPage == 2) {
-      return Scaffold(
-        body: Container(
-          padding: EdgeInsets.all(6),
-          child: TemplatePage(type: "clarity"),
-        ),
-      );
+      return TemplatePage(type: "clarity");
     } else {
-      return Scaffold(
-        body: Container(
-          padding: EdgeInsets.all(6),
-          child: TemplatePage(type: "confidence"),
-        ),
-      );
+      return TemplatePage(type: "confidence");
     }
   }
 }
