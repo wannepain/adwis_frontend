@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:adwis_frontend/services/api_service.dart';
+import 'package:adwis_frontend/services/chatbot_service.dart';
 
 class CareerCard extends StatefulWidget {
   final List history;
@@ -12,8 +12,6 @@ class CareerCard extends StatefulWidget {
 }
 
 class _CareerCardState extends State<CareerCard> {
-  final ApiService apiService = ApiService();
-
   List data = [];
   String salary = "";
   String title = "";
@@ -22,7 +20,7 @@ class _CareerCardState extends State<CareerCard> {
   double opacityLevel = 0.0; // Start hidden
 
   void setData() async {
-    final response = await apiService.getCareer(
+    final response = await ChatbotService().getCareer(
       history: widget.history,
     );
     data.add(response);
