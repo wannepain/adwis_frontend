@@ -11,12 +11,14 @@ class HomepageUi extends StatelessWidget {
   final List history;
   final Function restartConversation;
   final Function returnText;
+  final int numOfRestarts;
   HomepageUi({
     super.key,
     required this.scrollController,
     required this.history,
     required this.restartConversation,
     required this.returnText,
+    required this.numOfRestarts,
   });
 
   @override
@@ -72,7 +74,10 @@ class HomepageUi extends StatelessWidget {
             ),
             // Restart button OR text input below CareerCard
             history.isNotEmpty && history.last["end"] == true
-                ? RestartConvButton(restart: restartConversation)
+                ? RestartConvButton(
+                    restart: restartConversation,
+                    numOfRestarts: numOfRestarts,
+                  )
                 : TextInput(returnText: returnText),
             OverlayLogo(),
           ],

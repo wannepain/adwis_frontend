@@ -9,10 +9,12 @@ class AuthNotifier extends StateNotifier<Map> {
             "isUnlimited": false,
             "userImage": "",
             "isSignedIn": false,
+            "userData": "",
           },
         );
-  void checkSignedIn() async {
+  Future<void> checkSignedIn() async {
     final result = await AuthService().isSignedIn();
+    print(result);
     state = result;
   }
 

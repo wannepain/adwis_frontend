@@ -5,6 +5,7 @@ import 'package:adwis_frontend/pages/auth/unlimited/utils/unlimited_logo.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adwis_frontend/pages/auth/unlimited/utils/subscription_button.dart';
 import 'package:adwis_frontend/pages/auth/unlimited/utils/close_button.dart';
+import 'package:adwis_frontend/providers/popup_providers.dart';
 
 class UnlimitedPopup extends ConsumerStatefulWidget {
   const UnlimitedPopup({super.key});
@@ -20,6 +21,13 @@ class _UnlimitedPopupState extends ConsumerState<UnlimitedPopup> {
   void setOpenSignUp() {
     //navigate to homepage with the open sign up, after that come back to the payment screen
     Navigator.pushNamed(context, "/signup");
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ref.read(popupProvider.notifier).checkFirstOpen();
   }
 
   @override

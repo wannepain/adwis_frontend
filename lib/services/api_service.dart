@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:adwis_frontend/services/auth_service.dart';
 
 class ApiService {
   final String url = "https://adwis-api.onrender.com";
@@ -36,5 +37,22 @@ class ApiService {
     );
     final responseData = response.data;
     return responseData["clientSecret"];
+  }
+
+  Future<Map> getSubscriptionData() async {
+    final uid = AuthService().getUid();
+    final response =
+        await dio.post('$url//api/get-subscription', data: {'uid': uid});
+    final responseData = response.data;
+    return responseData;
+  }
+
+  Future<Map> cancelSubscription() async {
+    final uid = AuthService().getUid();
+    final response = await dio.post(
+      "$url/api/cancel-subscription",
+      data: {"uid": uid},
+    );
+    return response.data;
   }
 }

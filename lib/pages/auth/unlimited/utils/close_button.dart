@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:adwis_frontend/providers/popup_providers.dart';
 
-class CloseButtonTimer extends StatefulWidget {
+class CloseButtonTimer extends ConsumerStatefulWidget {
   const CloseButtonTimer({super.key});
 
   @override
-  State<CloseButtonTimer> createState() => _CloseButtonTimerState();
+  ConsumerState<CloseButtonTimer> createState() => _CloseButtonTimerState();
 }
 
-class _CloseButtonTimerState extends State<CloseButtonTimer> {
+class _CloseButtonTimerState extends ConsumerState<CloseButtonTimer> {
   bool canClose = false;
   int secondsRemaining = 3;
   Timer? _timer;
@@ -41,6 +43,7 @@ class _CloseButtonTimerState extends State<CloseButtonTimer> {
     return IconButton(
       onPressed: canClose
           ? () {
+              ref.read(popupProvider.notifier).setTo(value: false);
               Navigator.pushReplacementNamed(context, "/homepage");
             }
           : null, // Disable the button when it's not clickable

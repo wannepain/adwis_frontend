@@ -82,6 +82,7 @@ class AuthService {
       "isUnlimited": unlimited,
       "userImage": userImage,
       "isSignedIn": true,
+      "userData": user!,
     };
   }
 
@@ -93,6 +94,7 @@ class AuthService {
         "isUnlimited": false,
         "userImage": "",
         "isSignedIn": false,
+        "userData": "",
       };
     }
 
@@ -104,6 +106,7 @@ class AuthService {
       "isUnlimited": unlimited,
       "userImage": userImage,
       "isSignedIn": true,
+      "userData": user,
     };
   }
 
@@ -115,6 +118,11 @@ class AuthService {
       "isUnlimited": false,
       "userImage": "",
       "isSignedIn": false,
+      "userData": ""
     };
+  }
+
+  String getUid() {
+    return currentUser!.uid;
   }
 }

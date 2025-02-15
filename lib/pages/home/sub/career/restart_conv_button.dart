@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:adwis_frontend/providers/auth_providers.dart';
 
-class RestartConvButton extends StatelessWidget {
+class RestartConvButton extends ConsumerWidget {
   final Function restart;
-  const RestartConvButton({super.key, required this.restart});
+  final int numOfRestarts;
+  const RestartConvButton(
+      {super.key, required this.restart, required this.numOfRestarts});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     double cWidth = MediaQuery.of(context).size.width * 0.9;
+    final data = ref.watch(authProvider);
+    final restartsLeft = 5 - numOfRestarts;
     return IntrinsicHeight(
       child: Center(
         child: Container(
@@ -47,17 +53,54 @@ class RestartConvButton extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: GoogleFonts.inter().fontFamily,
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Color.fromRGBO(8, 7, 5, 1),
                   ),
                 ),
                 SizedBox(width: 8), // Spacing between text and icon
-                Icon(
-                  Icons.refresh,
-                  color: Color.fromRGBO(8, 7, 5, 1),
-                  size: 30,
-                ),
+                SizedBox(
+                  height: 42,
+                  width: 42,
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Center(
+                          child: data != null && data["isUnlimited"]
+                              ? RotatedBox(
+                                  quarterTurns: 1,
+                                  child: Text(
+                                    "8",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily:
+                                          GoogleFonts.inter().fontFamily,
+                                      color: Color.fromRGBO(8, 7, 5, 1),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                )
+                              : Text(
+                                  restartsLeft.toString(),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: GoogleFonts.inter().fontFamily,
+                                    color: Color.fromRGBO(8, 7, 5, 1),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                        ),
+                      ),
+                      Positioned.fill(
+                        child: Icon(
+                          Icons.refresh,
+                          color: Color.fromRGBO(8, 7, 5, 1),
+                          size: 42,
+                        ),
+                      )
+                    ],
+                  ),
+                )
               ],
             ),
           ),

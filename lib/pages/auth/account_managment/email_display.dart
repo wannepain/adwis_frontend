@@ -9,6 +9,7 @@ class EmailDisplay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final data = ref.watch(authProvider); //get email
     return ClipRRect(
       borderRadius: BorderRadius.all(
         Radius.circular(9),
@@ -49,9 +50,9 @@ class EmailDisplay extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "john.doe@gmail.com",
+                          data != null ? data["userData"]!.email : "",
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 20,
                             decoration: TextDecoration.none,
                             fontFamily: GoogleFonts.inter().fontFamily,
                             color: Color.fromRGBO(51, 101, 138, 1),
