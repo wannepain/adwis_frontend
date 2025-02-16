@@ -126,7 +126,7 @@ class _HomepageState extends ConsumerState<Homepage> {
               forceOpen: widget.forceOpenAuth,
               navigateAfter: widget.forceOpenAuth,
             ),
-            if (numOfRestarts >= 2)
+            if (numOfRestarts >= 5)
               Positioned(
                 bottom: 0,
                 left: 0,
