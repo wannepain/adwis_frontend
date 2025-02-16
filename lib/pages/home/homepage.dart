@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:adwis_frontend/utils/alert.dart';
 import 'package:adwis_frontend/providers/auth_providers.dart';
 import 'package:adwis_frontend/providers/popup_providers.dart';
+import 'package:adwis_frontend/providers/unlimited_provider.dart';
+import 'package:adwis_frontend/providers/restart_provider.dart';
 
 class Homepage extends ConsumerStatefulWidget {
   bool forceOpenAuth;
@@ -20,7 +22,6 @@ class _HomepageState extends ConsumerState<Homepage> {
   final ScrollController _scrollController = ScrollController();
   List history = [];
   List usedQuestionIdx = [];
-  int numOfRestarts = 1;
   bool showPopUp = false;
 
   @override
@@ -63,12 +64,13 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   void restartConversation() {
+    final numOfRestarts = ref.read(restartProvider);
     if (numOfRestarts < 5) {
       setState(() {
         history = [];
         usedQuestionIdx = [];
-        numOfRestarts += 1;
       });
+      ref.read(restartProvider.notifier).increment();
       setData();
     }
   }
@@ -92,6 +94,10 @@ class _HomepageState extends ConsumerState<Homepage> {
     }
   }
 
+  void resetFunction() {
+    ref.read(restartProvider.notifier).reset();
+  }
+
   @override
   void initState() {
     setData();
@@ -101,6 +107,7 @@ class _HomepageState extends ConsumerState<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    final numOfRestarts = ref.watch(restartProvider);
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(6),
@@ -119,30 +126,20 @@ class _HomepageState extends ConsumerState<Homepage> {
               forceOpen: widget.forceOpenAuth,
               navigateAfter: widget.forceOpenAuth,
             ),
-            Positioned(
-              top: 200,
-              left: 100,
-              child: TextButton(
-                onPressed: () {
-                  setState(() {
-                    Navigator.pushReplacementNamed(context, "/unlimited");
-                  });
-                },
-                child: Text("show overlay"),
+            if (numOfRestarts >= 2)
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Alert(
+                    type: "restarts",
+                    function: () {
+                      resetFunction();
+                    },
+                  ),
+                ),
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: numOfRestarts > 5
-                  ? Center(
-                      child: Alert(
-                        type: "restarts",
-                      ),
-                    )
-                  : SizedBox(),
-            ),
           ],
         ),
       ),

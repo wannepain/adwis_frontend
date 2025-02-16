@@ -1,18 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:adwis_frontend/providers/unlimited_provider.dart';
 
-class Alert extends StatelessWidget {
+class Alert extends ConsumerWidget {
   final String type;
-  const Alert({super.key, required this.type});
+  final Function function;
+  const Alert({super.key, required this.type, required this.function});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     Widget? icon;
     String? text1;
     String? text2;
     String? text3;
     String? link;
     Widget? button;
+
+    String restartsLogic() {
+      final data = ref.read(unlimitedProvider);
+      var hours;
+      var minutes;
+      if (!data["reset"] && data["resetTime"] != 0) {
+        print("!data[reset] || data[resetTime] != 0 executed");
+        final reset =
+            DateTime.now().millisecondsSinceEpoch >= data["resetTime"];
+        if (reset) {
+          //reset
+          print("reseting");
+          hours = "";
+          minutes = "";
+          function(); //call resetting function
+        } else {
+          // show time
+          print("showing times");
+          final date = DateTime.fromMillisecondsSinceEpoch(data["resetTime"]);
+          minutes = date.minute.toString().padLeft(2, '0');
+          hours = date.hour.toString().padLeft(2, '0');
+        }
+      } else {
+        print("setting times");
+        final date = DateTime.now().add(
+          Duration(minutes: 15),
+        );
+        final dateInUnix = date.millisecondsSinceEpoch;
+        minutes = date.minute.toString().padLeft(2, '0');
+        hours = date.hour.toString().padLeft(2, '0');
+        ref.read(unlimitedProvider.notifier).storeTime(dateInUnix);
+      }
+      return "$hours:$minutes";
+    }
 
     // Set values based on the type
     switch (type) {
@@ -26,55 +64,96 @@ class Alert extends StatelessWidget {
         break;
       case 'restarts':
         icon = SvgPicture.asset("assets/icons/logo_text.svg");
-        text1 = "Restar reset at:";
-        text2 = "10:15";
-        text3 = "or upgrade to unlimited";
-        button = ElevatedButton(
-          onPressed: () {},
-          style: ButtonStyle(),
-          child: Text("Upgrade"),
+        text1 = "You have used all free restarts";
+        text2 = "Reset at ${restartsLogic()}";
+        text3 = "Upgrade to unlimited for unlimited restarts";
+        button = IntrinsicHeight(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, "/unlimited");
+                },
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(
+                    Color.fromRGBO(51, 101, 138, 1),
+                  ),
+                ),
+                child: Text(
+                  "Upgrade".toUpperCase(),
+                  style: TextStyle(
+                    color: Color.fromRGBO(252, 254, 255, 1),
+                    fontFamily: GoogleFonts.acme().fontFamily,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
         break;
       default:
         break;
     }
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-      decoration: BoxDecoration(
-        color: Color.fromRGBO(239, 246, 251, 1),
-        borderRadius: BorderRadius.all(
-          Radius.circular(9),
-        ),
-        boxShadow: [
-          BoxShadow(
-            offset: Offset.zero,
-            spreadRadius: 0,
-            blurRadius: 4,
-            color: Color.fromRGBO(8, 7, 5, 0.25),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (icon != null) icon,
-          SizedBox(
-            height: 12,
-          ),
-          if (text1 != null) Text(text1, style: TextStyle(fontSize: 18)),
-          if (text2 != null) Text(text2, style: TextStyle(fontSize: 18)),
-          if (text3 != null) Text(text3, style: TextStyle(fontSize: 18)),
-          if (link != null)
-            TextButton(
-              onPressed: () {
-                // Handle link click
-              },
-              child: Text(link!, style: TextStyle(color: Colors.blue)),
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+          decoration: BoxDecoration(
+            color: Color.fromRGBO(239, 246, 251, 1),
+            borderRadius: BorderRadius.all(
+              Radius.circular(9),
             ),
-          if (button != null) button!,
-        ],
-      ),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset.zero,
+                spreadRadius: 0,
+                blurRadius: 4,
+                color: Color.fromRGBO(8, 7, 5, 0.25),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (icon != null) icon,
+              SizedBox(
+                height: 12,
+              ),
+              if (text1 != null)
+                Text(
+                  text1,
+                  style: TextStyle(fontSize: 18),
+                ),
+              if (text2 != null)
+                Text(
+                  text2,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: GoogleFonts.inter().fontFamily,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              if (text3 != null)
+                Text(
+                  text3,
+                  style: TextStyle(fontSize: 18),
+                ),
+              if (link != null)
+                TextButton(
+                  onPressed: () {
+                    // Handle link click
+                  },
+                  child: Text(link!, style: TextStyle(color: Colors.blue)),
+                ),
+              if (button != null) button!,
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
