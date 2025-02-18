@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:adwis_frontend/utils/alert.dart';
 import 'package:adwis_frontend/providers/auth_providers.dart';
 import 'package:adwis_frontend/providers/popup_providers.dart';
-import 'package:adwis_frontend/providers/unlimited_provider.dart';
 import 'package:adwis_frontend/providers/restart_provider.dart';
+import 'package:adwis_frontend/providers/history_providers.dart';
 
 class Homepage extends ConsumerStatefulWidget {
   bool forceOpenAuth;
@@ -48,9 +48,12 @@ class _HomepageState extends ConsumerState<Homepage> {
       history[history.length - 1]['client'] = text;
     });
     setData();
+    print(history);
   }
 
   void initAsyncLogic() async {
+    ref.read(historyProvider.notifier).readHistory();
+    //ref.read(historyProvider.notifier).clean();
     final bool openOpUp = ref.read(popupProvider);
     print(openOpUp);
     final Map data = ref.read(authProvider);
@@ -65,6 +68,9 @@ class _HomepageState extends ConsumerState<Homepage> {
 
   void restartConversation() {
     final numOfRestarts = ref.read(restartProvider);
+    ref
+        .read(historyProvider.notifier)
+        .addToFile(history.sublist(0, history.length - 1));
     if (numOfRestarts < 5) {
       setState(() {
         history = [];
@@ -83,7 +89,6 @@ class _HomepageState extends ConsumerState<Homepage> {
         history: history,
         usedQuestionIdx: usedQuestionIdx,
       );
-      print("result in history \n $result");
       setState(() {
         history = result["history"] ?? [];
         usedQuestionIdx = result["usedQuestionIdx"] ?? [];

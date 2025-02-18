@@ -4,8 +4,9 @@ import 'package:adwis_frontend/services/chatbot_service.dart';
 
 class CareerCard extends StatefulWidget {
   final List history;
+  final double size;
 
-  CareerCard({super.key, required this.history});
+  CareerCard({super.key, required this.history, this.size = 200});
 
   @override
   State<CareerCard> createState() => _CareerCardState();
@@ -20,6 +21,7 @@ class _CareerCardState extends State<CareerCard> {
   double opacityLevel = 0.0; // Start hidden
 
   void setData() async {
+    print(widget.history);
     final response = await ChatbotService().getCareer(
       history: widget.history,
     );
@@ -81,7 +83,7 @@ class _CareerCardState extends State<CareerCard> {
             child: IntrinsicHeight(
               child: Column(
                 children: [
-                  SizedBox(height: 200),
+                  SizedBox(height: widget.size),
                   IntrinsicHeight(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
