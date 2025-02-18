@@ -20,6 +20,7 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    ref.read(authProvider.notifier).checkSignedIn();
   }
 
   @override
