@@ -14,7 +14,6 @@ class AuthNotifier extends StateNotifier<Map> {
         );
   Future<void> checkSignedIn() async {
     final result = await AuthService().isSignedIn();
-    print(result);
     state = result;
   }
 

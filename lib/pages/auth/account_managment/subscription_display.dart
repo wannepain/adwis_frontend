@@ -35,17 +35,15 @@ class _SubscriptionDisplayState extends ConsumerState<SubscriptionDisplay> {
   }
 
   void cancelSubscription() {
-    final cancelResult = ApiService().cancelSubscription();
+    ApiService().cancelSubscription();
     //force refresh
     ref.read(authProvider.notifier).checkSignedIn();
-    print(cancelResult);
     initLogic();
   }
 
   void initLogic() async {
     final subscription = await ApiService().getSubscriptionData();
     final subscriptionData = subscription["data"];
-    print(subscription);
     setState(() {
       if (subscriptionData != null &&
           subscriptionData["free_trial"] != null &&

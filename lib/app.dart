@@ -32,7 +32,6 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.hidden) {
-      print("resetting notifier, state: $state");
       ref.read(popupProvider.notifier).reset();
     }
   }

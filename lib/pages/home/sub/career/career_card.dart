@@ -21,7 +21,6 @@ class _CareerCardState extends State<CareerCard> {
   double opacityLevel = 0.0; // Start hidden
 
   void setData() async {
-    print(widget.history);
     final response = await ChatbotService().getCareer(
       history: widget.history,
     );

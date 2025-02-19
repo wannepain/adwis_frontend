@@ -48,14 +48,12 @@ class _HomepageState extends ConsumerState<Homepage> {
       history[history.length - 1]['client'] = text;
     });
     setData();
-    print(history);
   }
 
   void initAsyncLogic() async {
     ref.read(historyProvider.notifier).readHistory();
     //ref.read(historyProvider.notifier).clean();
     final bool openOpUp = ref.read(popupProvider);
-    print(openOpUp);
     final Map data = ref.read(authProvider);
     if (openOpUp && !data["isUnlimited"] && mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

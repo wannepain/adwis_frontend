@@ -21,7 +21,6 @@ class UnlimitedNotifier extends StateNotifier<Map<String, dynamic>> {
     final currentTime = DateTime.now().millisecondsSinceEpoch;
 
     final oldTime = state["resetTime"];
-    print(oldTime);
     final isReset = currentTime > oldTime;
     state = {
       "resetTime": oldTime,

@@ -70,7 +70,6 @@ class _TopCareersState extends ConsumerState<TopCareers> {
                   : 5, // Assuming you want to show top 5 careers
               itemBuilder: (context, index) {
                 if (histories.length > 0) {
-                  print(histories[index]);
                   return CareerCard(
                     history: histories[index],
                     size: (MediaQuery.sizeOf(context).height / 12) * 2,

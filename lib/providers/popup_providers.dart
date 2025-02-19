@@ -7,7 +7,6 @@ class OpenNotifier extends StateNotifier<bool> {
             true);
   Future<void> checkFirstOpen() async {
     state = await IsFirstRun.isFirstRun();
-    print("result in checkFirtOpen: $state");
   }
 
   void setTo({required value}) {
@@ -17,7 +16,6 @@ class OpenNotifier extends StateNotifier<bool> {
   reset() {
     state = true;
     IsFirstRun.reset();
-    print(state);
   }
 }
 

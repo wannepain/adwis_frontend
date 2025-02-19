@@ -20,7 +20,6 @@ class AuthService {
 
   Future<UserCredential?> signInWithGoogle() async {
     if (currentUser != null) {
-      print("User already signed in: ${currentUser!.email}");
       return null; // No need to sign in again
     }
 
@@ -44,7 +43,6 @@ class AuthService {
     // Store user data
     await storeUserData(userCredential.user!);
 
-    print("User signed in: ${userCredential.user!.email}");
     return userCredential;
   }
 
