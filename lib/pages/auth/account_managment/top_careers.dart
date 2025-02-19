@@ -1,43 +1,34 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/sub/career/career_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adwis_frontend/providers/history_providers.dart';
 
-class TopCareers extends ConsumerWidget {
+class TopCareers extends ConsumerStatefulWidget {
   TopCareers({super.key});
 
-  final placeholderHistory = [
-    {
-      "bot": {
-        "ID": "1",
-        "Question_Text":
-            "Hi! I’m here to help you explore your skills and interests. Ready to start?"
-      },
-      "client": "Yes I am "
-    },
-    {
-      "bot": {
-        "ID": "28",
-        "Question_Text":
-            "Do you see your work as a means to an end, or do you want it to reflect your passion and purpose?"
-      },
-      "client": "It must reflect my purpose"
-    },
-    {
-      "bot": {
-        "ID": "4",
-        "Question_Text":
-            "Have you ever been told you’re good at something? If so, what is it?"
-      },
-      "client": "I would probably do martial arts"
-    }
-  ];
+  @override
+  _TopCareersState createState() => _TopCareersState();
+}
+
+class _TopCareersState extends ConsumerState<TopCareers> {
+  double opacityLevel = 0.0;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, _changeOpacity);
+  }
+
+  void _changeOpacity() {
+    setState(() {
+      opacityLevel = 1.0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final data = ref.watch(historyProvider);
     final histories = data["data"];
     return Column(
@@ -66,23 +57,29 @@ class TopCareers extends ConsumerWidget {
             ),
           ],
         ),
-        Container(
-          height: (MediaQuery.sizeOf(context).height / 10) * 3,
-          width: MediaQuery.sizeOf(context).width,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: histories.length < 5
-                ? histories.length
-                : 5, // Assuming you want to show top 5 careers
-            itemBuilder: (context, index) {
-              if (histories.length > 0) {
-                print(histories[index]);
-                return CareerCard(
-                  history: histories[index],
-                  size: (MediaQuery.sizeOf(context).height / 12) * 2,
-                );
-              }
-            },
+        AnimatedOpacity(
+          opacity: opacityLevel,
+          duration: const Duration(seconds: 1),
+          child: Container(
+            height: (MediaQuery.sizeOf(context).height / 10) * 3,
+            width: MediaQuery.sizeOf(context).width,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: histories.length < 5
+                  ? histories.length
+                  : 5, // Assuming you want to show top 5 careers
+              itemBuilder: (context, index) {
+                if (histories.length > 0) {
+                  print(histories[index]);
+                  return CareerCard(
+                    history: histories[index],
+                    size: (MediaQuery.sizeOf(context).height / 12) * 2,
+                  );
+                } else {
+                  return Container(); // Return an empty container if histories is empty
+                }
+              },
+            ),
           ),
         ),
       ],

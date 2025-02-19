@@ -21,6 +21,20 @@ class _AuthCardOverlayState extends ConsumerState<AuthCardOverlay> {
   String userImgUrl = "";
   bool _hasNavigated = false;
   final ApiService apiService = ApiService();
+  double signOpactity = 0.0;
+  double buttonOpacity = 0.0;
+
+  void _changeButtonOpacity() {
+    setState(() {
+      buttonOpacity = buttonOpacity == 0.0 ? 1.0 : 0.0;
+    });
+  }
+
+  void _changeSignOpacity() {
+    setState(() {
+      signOpactity = signOpactity == 0.0 ? 1.0 : 0.0;
+    });
+  }
 
   void signUpLogic() async {
     await ref.read(authProvider.notifier).signIn();
@@ -37,13 +51,27 @@ class _AuthCardOverlayState extends ConsumerState<AuthCardOverlay> {
     setState(() {
       isOpen = !isOpen;
     });
+
+    // First, fade out the button
+    _changeButtonOpacity();
+
+    // Then, after a short delay, fade in the sign-up card
+    Future.delayed(Duration(milliseconds: 200), _changeSignOpacity);
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     isOpen = widget.forceOpen;
+
+    // Ensure the button appears only after the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          buttonOpacity = 1.0;
+        });
+      }
+    });
   }
 
   @override
@@ -67,12 +95,31 @@ class _AuthCardOverlayState extends ConsumerState<AuthCardOverlay> {
     return Stack(
       children: [
         isOpen
-            ? SignUpCard(
-                close: close,
-                onTap: onTap,
+            ? Positioned(
+                bottom: 36,
+                left: 6,
+                right: 6,
+                child: AnimatedOpacity(
+                  opacity: signOpactity,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.easeInOutCirc,
+                  child: SignUpCard(
+                    close: close,
+                    onTap: onTap,
+                  ),
+                ),
               )
-            : AccountButton(
-                close: close,
+            : Positioned(
+                top: (MediaQuery.of(context).size.height / 5) * 2,
+                right: 12,
+                child: AnimatedOpacity(
+                  opacity: buttonOpacity,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.easeInOutCirc,
+                  child: AccountButton(
+                    close: close,
+                  ),
+                ),
               ),
       ],
     );

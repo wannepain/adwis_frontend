@@ -17,6 +17,13 @@ class UnlimitedPopup extends ConsumerStatefulWidget {
 class _UnlimitedPopupState extends ConsumerState<UnlimitedPopup> {
   bool _hasNavigated = false;
   bool openSignUp = false;
+  double opacityLevel = 0.0;
+
+  void _changeOpacity() {
+    setState(() {
+      opacityLevel = 1.0;
+    });
+  }
 
   void setOpenSignUp() {
     //navigate to homepage with the open sign up, after that come back to the payment screen
@@ -28,6 +35,7 @@ class _UnlimitedPopupState extends ConsumerState<UnlimitedPopup> {
     // TODO: implement initState
     super.initState();
     ref.read(popupProvider.notifier).checkFirstOpen();
+    Future.delayed(Duration.zero, _changeOpacity);
   }
 
   @override
@@ -50,152 +58,159 @@ class _UnlimitedPopupState extends ConsumerState<UnlimitedPopup> {
             left: 12,
             right: 12,
             top: MediaQuery.sizeOf(context).height / 3,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      UnlimitedLogo(),
-                      IntrinsicHeight(
-                        child: Column(
-                          children: [
-                            Text(
-                              "Choose your",
-                              style: TextStyle(
-                                fontFamily: GoogleFonts.inter().fontFamily,
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              "Subscription",
-                              style: TextStyle(
-                                fontFamily: GoogleFonts.inter().fontFamily,
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SubscriptionButton(
-                        openSignUp: setOpenSignUp,
-                      ),
-                      SizedBox(
-                        height: 24,
-                      )
-                    ],
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+            child: AnimatedOpacity(
+              opacity: opacityLevel,
+              duration: Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(
-                          "Why go ",
-                          style: TextStyle(
-                            color: Color.fromRGBO(8, 7, 5, 1),
-                            fontSize: 30,
-                            fontFamily: GoogleFonts.inter().fontFamily,
-                            fontWeight: FontWeight.normal,
+                        UnlimitedLogo(),
+                        IntrinsicHeight(
+                          child: Column(
+                            children: [
+                              Text(
+                                "Choose your",
+                                style: TextStyle(
+                                  fontFamily: GoogleFonts.inter().fontFamily,
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                "Subscription",
+                                style: TextStyle(
+                                  fontFamily: GoogleFonts.inter().fontFamily,
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Text(
-                          "unlimited ",
-                          style: TextStyle(
-                            color: Color.fromRGBO(51, 101, 138, 1),
-                            fontSize: 30,
-                            fontFamily: GoogleFonts.inter().fontFamily,
-                            fontWeight: FontWeight.normal,
-                          ),
+                        SubscriptionButton(
+                          openSignUp: setOpenSignUp,
                         ),
-                        Text(
-                          "?",
-                          style: TextStyle(
-                            color: Color.fromRGBO(8, 7, 5, 1),
-                            fontSize: 30,
-                            fontFamily: GoogleFonts.inter().fontFamily,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
+                        SizedBox(
+                          height: 24,
+                        )
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.check_rounded,
-                                  size: 36,
-                                  color: Color.fromRGBO(51, 101, 138, 1),
-                                ),
-                                SizedBox(
-                                  width: 12,
-                                ),
-                                Text(
-                                  "100% Add free",
-                                  style: TextStyle(
-                                    color: Color.fromRGBO(8, 7, 5, 1),
-                                    fontSize: 30,
-                                    fontFamily: GoogleFonts.inter().fontFamily,
-                                    fontWeight: FontWeight.normal,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Why go ",
+                            style: TextStyle(
+                              color: Color.fromRGBO(8, 7, 5, 1),
+                              fontSize: 30,
+                              fontFamily: GoogleFonts.inter().fontFamily,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          Text(
+                            "unlimited ",
+                            style: TextStyle(
+                              color: Color.fromRGBO(51, 101, 138, 1),
+                              fontSize: 30,
+                              fontFamily: GoogleFonts.inter().fontFamily,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          Text(
+                            "?",
+                            style: TextStyle(
+                              color: Color.fromRGBO(8, 7, 5, 1),
+                              fontSize: 30,
+                              fontFamily: GoogleFonts.inter().fontFamily,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.check_rounded,
+                                    size: 36,
+                                    color: Color.fromRGBO(51, 101, 138, 1),
                                   ),
-                                )
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.check_rounded,
-                                  size: 36,
-                                  color: Color.fromRGBO(51, 101, 138, 1),
-                                ),
-                                SizedBox(
-                                  width: 12,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Unlimited ",
-                                      style: TextStyle(
-                                        color: Color.fromRGBO(8, 7, 5, 1),
-                                        fontSize: 30,
-                                        fontFamily:
-                                            GoogleFonts.inter().fontFamily,
-                                        fontWeight: FontWeight.normal,
-                                      ),
+                                  SizedBox(
+                                    width: 12,
+                                  ),
+                                  Text(
+                                    "100% Add free",
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(8, 7, 5, 1),
+                                      fontSize: 30,
+                                      fontFamily:
+                                          GoogleFonts.inter().fontFamily,
+                                      fontWeight: FontWeight.normal,
                                     ),
-                                    Text(
-                                      "Restarts",
-                                      style: TextStyle(
-                                        color: Color.fromRGBO(8, 7, 5, 1),
-                                        fontSize: 30,
-                                        fontFamily:
-                                            GoogleFonts.inter().fontFamily,
-                                        fontWeight: FontWeight.normal,
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.check_rounded,
+                                    size: 36,
+                                    color: Color.fromRGBO(51, 101, 138, 1),
+                                  ),
+                                  SizedBox(
+                                    width: 12,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Unlimited ",
+                                        style: TextStyle(
+                                          color: Color.fromRGBO(8, 7, 5, 1),
+                                          fontSize: 30,
+                                          fontFamily:
+                                              GoogleFonts.inter().fontFamily,
+                                          fontWeight: FontWeight.normal,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
-                )
-              ],
+                                      Text(
+                                        "Restarts",
+                                        style: TextStyle(
+                                          color: Color.fromRGBO(8, 7, 5, 1),
+                                          fontSize: 30,
+                                          fontFamily:
+                                              GoogleFonts.inter().fontFamily,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
           Positioned(

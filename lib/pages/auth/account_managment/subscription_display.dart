@@ -16,9 +16,23 @@ class SubscriptionDisplay extends ConsumerStatefulWidget {
 }
 
 class _SubscriptionDisplayState extends ConsumerState<SubscriptionDisplay> {
+  double opacityLevel = 0.0;
   String? subscriptionType;
   String? nextChargeDate;
   String? nextChargeTime;
+
+  @override
+  void initState() {
+    super.initState();
+    initLogic();
+    Future.delayed(Duration.zero, _changeOpacity);
+  }
+
+  void _changeOpacity() {
+    setState(() {
+      opacityLevel = 1.0;
+    });
+  }
 
   void cancelSubscription() {
     final cancelResult = ApiService().cancelSubscription();
@@ -59,232 +73,230 @@ class _SubscriptionDisplayState extends ConsumerState<SubscriptionDisplay> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    initLogic();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final data = ref.watch(authProvider);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Color.fromRGBO(51, 101, 138, 1),
-            borderRadius: BorderRadius.all(
-              Radius.circular(9),
-            ),
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 4,
-                spreadRadius: 0,
-                offset: Offset(0, 0),
-                color: Color.fromRGBO(0, 0, 0, 0.25),
+    return AnimatedOpacity(
+      opacity: opacityLevel,
+      duration: const Duration(seconds: 1),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(51, 101, 138, 1),
+              borderRadius: BorderRadius.all(
+                Radius.circular(9),
               ),
-            ],
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 4,
+                  spreadRadius: 0,
+                  offset: Offset(0, 0),
+                  color: Color.fromRGBO(0, 0, 0, 0.25),
+                ),
+              ],
+            ),
+            padding: EdgeInsets.all(12),
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(
+                Radius.circular(9),
+              ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: 3.0,
+                  sigmaY: 3.0,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Subscription",
+                          style: TextStyle(
+                            fontSize: 16,
+                            decoration: TextDecoration.none,
+                            color: Color.fromRGBO(252, 254, 255, 0.7),
+                            fontFamily: GoogleFonts.inter().fontFamily,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        subscriptionType != null
+                            ? Row(
+                                children: [
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  Text(
+                                    subscriptionType ?? "",
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      decoration: TextDecoration.none,
+                                      color: Color.fromRGBO(252, 254, 255, 1),
+                                      fontFamily:
+                                          GoogleFonts.inter().fontFamily,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Container(
+                                padding: EdgeInsets.all(2),
+                                child: LoadingAnimationWidget.waveDots(
+                                  color: Color.fromRGBO(252, 254, 255, 1),
+                                  size: 20,
+                                ),
+                              )
+                      ],
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if (data != null) {
+                          if (data["isUnlimited"]) {
+                            cancelSubscription();
+                          } else {
+                            Navigator.pushNamed(context, "/unlimited");
+                          }
+                        }
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: data!["isUnlimited"]
+                            ? [
+                                Text(
+                                  "Cancel",
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(252, 254, 255, 0.7),
+                                    fontFamily: GoogleFonts.inter().fontFamily,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                    decoration: TextDecoration.none,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.close,
+                                  color: Color.fromRGBO(252, 254, 255, 0.7),
+                                  size: 30,
+                                ),
+                              ]
+                            : [
+                                Text(
+                                  "Go ",
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(252, 254, 255, 0.5),
+                                    fontFamily: GoogleFonts.inter().fontFamily,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                    decoration: TextDecoration.none,
+                                  ),
+                                ),
+                                UnlimitedLogo(
+                                  size: 36,
+                                  textColor: Color.fromRGBO(184, 225, 255, 1),
+                                  textSize: 12,
+                                  logoColor: Color.fromRGBO(252, 254, 255, 0.7),
+                                ),
+                                SizedBox(
+                                  width: 6,
+                                )
+                              ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
           ),
-          padding: EdgeInsets.all(12),
-          child: ClipRRect(
-            borderRadius: BorderRadius.all(
-              Radius.circular(9),
-            ),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(
-                sigmaX: 3.0,
-                sigmaY: 3.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Subscription",
+          SizedBox(
+            height: 3,
+          ),
+          if (nextChargeDate != "" && nextChargeTime != "")
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "will be charged the ",
+                  style: TextStyle(
+                    fontSize: 16,
+                    decoration: TextDecoration.none,
+                    fontFamily: GoogleFonts.inter().fontFamily,
+                    fontWeight: FontWeight.w300,
+                    color: Color.fromRGBO(51, 101, 138, 1),
+                    shadows: [
+                      Shadow(
+                        offset: Offset.zero,
+                        blurRadius: 4,
+                        color: Color.fromRGBO(0, 0, 0, 0.25),
+                      ),
+                    ],
+                  ),
+                ),
+                nextChargeDate == null
+                    ? LoadingAnimationWidget.waveDots(
+                        color: Color.fromRGBO(51, 101, 138, 1),
+                        size: 16,
+                      )
+                    : Text(
+                        nextChargeDate ?? "",
                         style: TextStyle(
                           fontSize: 16,
                           decoration: TextDecoration.none,
-                          color: Color.fromRGBO(252, 254, 255, 0.7),
                           fontFamily: GoogleFonts.inter().fontFamily,
-                          fontWeight: FontWeight.w300,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromRGBO(51, 101, 138, 1),
+                          shadows: [
+                            Shadow(
+                              offset: Offset.zero,
+                              blurRadius: 4,
+                              color: Color.fromRGBO(0, 0, 0, 0.25),
+                            ),
+                          ],
                         ),
                       ),
-                      subscriptionType != null
-                          ? Row(
-                              children: [
-                                SizedBox(
-                                  width: 6,
-                                ),
-                                Text(
-                                  subscriptionType ?? "",
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    decoration: TextDecoration.none,
-                                    color: Color.fromRGBO(252, 254, 255, 1),
-                                    fontFamily: GoogleFonts.inter().fontFamily,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            )
-                          : Container(
-                              padding: EdgeInsets.all(2),
-                              child: LoadingAnimationWidget.waveDots(
-                                color: Color.fromRGBO(252, 254, 255, 1),
-                                size: 20,
-                              ),
-                            )
+                Text(
+                  " at ",
+                  style: TextStyle(
+                    fontSize: 16,
+                    decoration: TextDecoration.none,
+                    fontFamily: GoogleFonts.inter().fontFamily,
+                    fontWeight: FontWeight.w300,
+                    color: Color.fromRGBO(51, 101, 138, 1),
+                    shadows: [
+                      Shadow(
+                        offset: Offset.zero,
+                        blurRadius: 4,
+                        color: Color.fromRGBO(0, 0, 0, 0.25),
+                      ),
                     ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      if (data != null) {
-                        if (data["isUnlimited"]) {
-                          cancelSubscription();
-                        } else {
-                          Navigator.pushNamed(context, "/unlimited");
-                        }
-                      }
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: data!["isUnlimited"]
-                          ? [
-                              Text(
-                                "Cancel",
-                                style: TextStyle(
-                                  color: Color.fromRGBO(252, 254, 255, 0.7),
-                                  fontFamily: GoogleFonts.inter().fontFamily,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 24,
-                                  decoration: TextDecoration.none,
-                                ),
-                              ),
-                              Icon(
-                                Icons.close,
-                                color: Color.fromRGBO(252, 254, 255, 0.7),
-                                size: 30,
-                              ),
-                            ]
-                          : [
-                              Text(
-                                "Go ",
-                                style: TextStyle(
-                                  color: Color.fromRGBO(252, 254, 255, 0.5),
-                                  fontFamily: GoogleFonts.inter().fontFamily,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 24,
-                                  decoration: TextDecoration.none,
-                                ),
-                              ),
-                              UnlimitedLogo(
-                                size: 36,
-                                textColor: Color.fromRGBO(184, 225, 255, 1),
-                                textSize: 12,
-                                logoColor: Color.fromRGBO(252, 254, 255, 0.7),
-                              ),
-                              SizedBox(
-                                width: 6,
-                              )
-                            ],
-                    ),
-                  )
-                ],
-              ),
+                ),
+                nextChargeTime == null
+                    ? LoadingAnimationWidget.waveDots(
+                        color: Color.fromRGBO(51, 101, 138, 1),
+                        size: 16,
+                      )
+                    : Text(
+                        nextChargeTime ?? "",
+                        style: TextStyle(
+                          fontSize: 16,
+                          decoration: TextDecoration.none,
+                          fontFamily: GoogleFonts.inter().fontFamily,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromRGBO(51, 101, 138, 1),
+                          shadows: [
+                            Shadow(
+                              offset: Offset.zero,
+                              blurRadius: 4,
+                              color: Color.fromRGBO(0, 0, 0, 0.25),
+                            ),
+                          ],
+                        ),
+                      ),
+              ],
             ),
-          ),
-        ),
-        SizedBox(
-          height: 3,
-        ),
-        if (nextChargeDate != "" && nextChargeTime != "")
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "will be charged the ",
-                style: TextStyle(
-                  fontSize: 16,
-                  decoration: TextDecoration.none,
-                  fontFamily: GoogleFonts.inter().fontFamily,
-                  fontWeight: FontWeight.w300,
-                  color: Color.fromRGBO(51, 101, 138, 1),
-                  shadows: [
-                    Shadow(
-                      offset: Offset.zero,
-                      blurRadius: 4,
-                      color: Color.fromRGBO(0, 0, 0, 0.25),
-                    ),
-                  ],
-                ),
-              ),
-              nextChargeDate == null
-                  ? LoadingAnimationWidget.waveDots(
-                      color: Color.fromRGBO(51, 101, 138, 1),
-                      size: 16,
-                    )
-                  : Text(
-                      nextChargeDate ?? "",
-                      style: TextStyle(
-                        fontSize: 16,
-                        decoration: TextDecoration.none,
-                        fontFamily: GoogleFonts.inter().fontFamily,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromRGBO(51, 101, 138, 1),
-                        shadows: [
-                          Shadow(
-                            offset: Offset.zero,
-                            blurRadius: 4,
-                            color: Color.fromRGBO(0, 0, 0, 0.25),
-                          ),
-                        ],
-                      ),
-                    ),
-              Text(
-                " at ",
-                style: TextStyle(
-                  fontSize: 16,
-                  decoration: TextDecoration.none,
-                  fontFamily: GoogleFonts.inter().fontFamily,
-                  fontWeight: FontWeight.w300,
-                  color: Color.fromRGBO(51, 101, 138, 1),
-                  shadows: [
-                    Shadow(
-                      offset: Offset.zero,
-                      blurRadius: 4,
-                      color: Color.fromRGBO(0, 0, 0, 0.25),
-                    ),
-                  ],
-                ),
-              ),
-              nextChargeTime == null
-                  ? LoadingAnimationWidget.waveDots(
-                      color: Color.fromRGBO(51, 101, 138, 1),
-                      size: 16,
-                    )
-                  : Text(
-                      nextChargeTime ?? "",
-                      style: TextStyle(
-                        fontSize: 16,
-                        decoration: TextDecoration.none,
-                        fontFamily: GoogleFonts.inter().fontFamily,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromRGBO(51, 101, 138, 1),
-                        shadows: [
-                          Shadow(
-                            offset: Offset.zero,
-                            blurRadius: 4,
-                            color: Color.fromRGBO(0, 0, 0, 0.25),
-                          ),
-                        ],
-                      ),
-                    ),
-            ],
-          ),
-      ],
+        ],
+      ),
     );
   }
 }
