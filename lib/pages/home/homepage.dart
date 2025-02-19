@@ -82,7 +82,7 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   void setData() async {
-    if (history.length > 1) {
+    if (history.length > 15) {
       history.add({"end": true});
     } else {
       Map result = await ChatbotService().chatbotRespond(
