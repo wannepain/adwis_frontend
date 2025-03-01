@@ -12,7 +12,20 @@
           "package_name": "com.example.adwis_frontend"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "563539782861-qfbhctqeusak40ooko4u7ovjb7o1rjc0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.adwis_frontend",
+            "certificate_hash": "254a59d7fc82d3363b0cf73368597acfa1660927"
+          }
+        },
+        {
+          "client_id": "563539782861-hipc2gj9atusts2cfk16amibvkrc9v3l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDZXA9oCVxnLnL9JVXHfm5CMF5ktNH9sD4"
@@ -20,7 +33,63 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "563539782861-hipc2gj9atusts2cfk16amibvkrc9v3l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "563539782861-u0akv72vofrgaa95o3a9tm75ein5vdfs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.adwisFrontend"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:563539782861:android:a133cc983ac484206d4d84",
+        "android_client_info": {
+          "package_name": "com.wannepain.adwis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "563539782861-mfg6cfej587kl7tiqha69fkhs2s4r07h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wannepain.adwis",
+            "certificate_hash": "f0a48c27581b80a15f86e9261136ea8aa86f7130"
+          }
+        },
+        {
+          "client_id": "563539782861-hipc2gj9atusts2cfk16amibvkrc9v3l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZXA9oCVxnLnL9JVXHfm5CMF5ktNH9sD4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "563539782861-hipc2gj9atusts2cfk16amibvkrc9v3l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "563539782861-u0akv72vofrgaa95o3a9tm75ein5vdfs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.adwisFrontend"
+              }
+            }
+          ]
         }
       }
     }
