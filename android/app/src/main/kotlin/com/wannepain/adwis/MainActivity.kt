@@ -1,4 +1,4 @@
-package com.example.adwis_frontend
+package com.wannepain.adwis
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 
