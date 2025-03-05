@@ -22,6 +22,7 @@ class TextFieldWithIcon extends StatelessWidget {
       children: [
         Expanded(
           child: TextField(
+            cursorColor: Color.fromRGBO(51, 101, 138, 1),
             //controller: _controller,
             onChanged: (value) {
               _text = value;
