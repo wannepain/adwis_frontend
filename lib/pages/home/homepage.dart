@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/sub/homepage_ui.dart';
-import 'package:adwis_frontend/pages/auth/auth_card_overlay.dart';
 import 'package:adwis_frontend/services/chatbot_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:adwis_frontend/utils/alert.dart';
-import 'package:adwis_frontend/providers/auth_providers.dart';
-import 'package:adwis_frontend/providers/popup_providers.dart';
 import 'package:adwis_frontend/providers/restart_provider.dart';
 import 'package:adwis_frontend/providers/history_providers.dart';
 
@@ -53,15 +50,6 @@ class _HomepageState extends ConsumerState<Homepage> {
   void initAsyncLogic() async {
     ref.read(historyProvider.notifier).readHistory();
     //ref.read(historyProvider.notifier).clean();
-    final bool openOpUp = ref.read(popupProvider);
-    final Map data = ref.read(authProvider);
-    if (openOpUp && !data["isUnlimited"] && mounted) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          Navigator.pushReplacementNamed(context, "/unlimited");
-        }
-      });
-    }
   }
 
   void restartConversation() {
@@ -124,10 +112,6 @@ class _HomepageState extends ConsumerState<Homepage> {
                 returnText: returnText,
                 numOfRestarts: numOfRestarts,
               ),
-            ),
-            AuthCardOverlay(
-              forceOpen: widget.forceOpenAuth,
-              navigateAfter: widget.forceOpenAuth,
             ),
             if (numOfRestarts >= 5)
               Positioned(

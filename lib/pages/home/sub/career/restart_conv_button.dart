@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:adwis_frontend/providers/auth_providers.dart';
 
 class RestartConvButton extends ConsumerWidget {
   final Function restart;
@@ -12,7 +11,6 @@ class RestartConvButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double cWidth = MediaQuery.of(context).size.width * 0.9;
-    final data = ref.watch(authProvider);
     final restartsLeft = 5 - numOfRestarts;
     return IntrinsicHeight(
       child: Center(
@@ -66,29 +64,15 @@ class RestartConvButton extends ConsumerWidget {
                     children: [
                       Positioned.fill(
                         child: Center(
-                          child: data != null && data["isUnlimited"]
-                              ? RotatedBox(
-                                  quarterTurns: 1,
-                                  child: Text(
-                                    "8",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily:
-                                          GoogleFonts.inter().fontFamily,
-                                      color: Color.fromRGBO(8, 7, 5, 1),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                )
-                              : Text(
-                                  restartsLeft.toString(),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: GoogleFonts.inter().fontFamily,
-                                    color: Color.fromRGBO(8, 7, 5, 1),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                          child: Text(
+                            restartsLeft.toString(),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: GoogleFonts.inter().fontFamily,
+                              color: Color.fromRGBO(8, 7, 5, 1),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                       Positioned.fill(
