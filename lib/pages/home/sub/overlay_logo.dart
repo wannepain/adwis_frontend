@@ -29,7 +29,7 @@ class _OverlayLogoState extends ConsumerState<OverlayLogo> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.only(top: 30),
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Color.fromRGBO(252, 254, 255, 1),

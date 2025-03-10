@@ -6,20 +6,18 @@ class ChatbotService {
 
   ChatbotService();
 
-  Future<Map> chatbotRespond(
-      {required List history, required List usedQuestionIdx}) async {
+  Future<Map> chatbotRespond({required List history}) async {
     try {
-      final response = await dio.post("$url/respond",
-          data: {"history": history, "used_question_idx": usedQuestionIdx});
+      final response =
+          await dio.post("$url/respond", data: {"history": history});
 
       return {
         "history": response.data['history'],
-        "usedQuestionIdx": response.data['used_question_idx'],
         "error": false,
       };
     } catch (e) {
       print('Error: $e');
-      return {"history": null, "usedQuestionIdx": null, "error": e};
+      return {"history": null, "error": e};
     }
   }
 
@@ -30,7 +28,7 @@ class ChatbotService {
       return response.data["career"];
     } catch (e) {
       print('Error: $e');
-      return {"history": null, "usedQuestionIdx": null, "error": e};
+      return {"history": null, "error": e};
     }
   }
 }

@@ -18,7 +18,6 @@ class _HomepageState extends ConsumerState<Homepage> {
   //final dio = Dio();
   final ScrollController _scrollController = ScrollController();
   List history = [];
-  List usedQuestionIdx = [];
   bool showPopUp = false;
 
   @override
@@ -60,7 +59,6 @@ class _HomepageState extends ConsumerState<Homepage> {
     if (numOfRestarts < 5) {
       setState(() {
         history = [];
-        usedQuestionIdx = [];
       });
       ref.read(restartProvider.notifier).increment();
       setData();
@@ -68,16 +66,14 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   void setData() async {
-    if (history.length > 15) {
+    if (history.length > 10) {
       history.add({"end": true});
     } else {
       Map result = await ChatbotService().chatbotRespond(
         history: history,
-        usedQuestionIdx: usedQuestionIdx,
       );
       setState(() {
         history = result["history"] ?? [];
-        usedQuestionIdx = result["usedQuestionIdx"] ?? [];
       });
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _scrollToBottom();

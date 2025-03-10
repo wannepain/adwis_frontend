@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ChatBuble extends StatefulWidget {
-  const ChatBuble({super.key, required this.text, required this.isMe});
+  const ChatBuble(
+      {super.key,
+      required this.text,
+      required this.isMe,
+      this.isFirst = false});
 
   final String text;
   final bool isMe;
+  final bool isFirst;
 
   @override
   State<ChatBuble> createState() => _ChatBubleState();
@@ -48,7 +53,8 @@ class _ChatBubleState extends State<ChatBuble> {
                 maxWidth: c_width, // Limit max width
               ),
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+              margin: EdgeInsets.symmetric(
+                  vertical: widget.isFirst ? 36 : 6, horizontal: 12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(9)),
                 color: widget.isMe
@@ -69,7 +75,7 @@ class _ChatBubleState extends State<ChatBuble> {
                 child: Text(
                   widget.text,
                   style: TextStyle(fontSize: 16),
-                  textAlign: widget.isMe ? TextAlign.end : TextAlign.start,
+                  textAlign: TextAlign.start,
                 ),
               ),
             ),

@@ -55,11 +55,18 @@ class HomepageUi extends StatelessWidget {
                   var bot = history[index]['bot'] == null
                       ? ""
                       : history[index]['bot']['Question_Text'];
-                  var client = history[index]['client'] ?? "";
+                  var client = history[index]['client'] == null
+                      ? ""
+                      : history[index]['client'];
 
                   List<Widget> toReturn = [];
                   if (bot.isNotEmpty) {
-                    toReturn.add(ChatBuble(text: bot, isMe: false));
+                    print(index == 0);
+                    toReturn.add(ChatBuble(
+                      text: bot,
+                      isMe: false,
+                      isFirst: index == 0,
+                    ));
                   }
                   if (client.isNotEmpty) {
                     toReturn.add(ChatBuble(text: client, isMe: true));
