@@ -10,7 +10,7 @@ class TextInput extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 12),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 18),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           border: Border.all(
             color: Color.fromRGBO(51, 101, 138, 1),
@@ -20,7 +20,7 @@ class TextInput extends StatelessWidget {
           borderRadius: BorderRadius.circular(9),
           boxShadow: [
             BoxShadow(
-              color: Color.fromRGBO(51, 101, 138, 1),
+              color: Color.fromRGBO(51, 101, 138, 0.7),
               spreadRadius: 1,
               blurRadius: 4,
               offset: Offset(0, 0),

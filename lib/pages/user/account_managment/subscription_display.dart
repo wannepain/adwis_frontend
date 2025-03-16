@@ -46,7 +46,9 @@ class _SubscriptionDisplayState extends ConsumerState<SubscriptionDisplay> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/unlimited");
+                    },
                     child: Text(
                       "Cancel",
                       style: TextStyle(

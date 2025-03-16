@@ -51,7 +51,7 @@ class _OverlayLogoState extends ConsumerState<OverlayLogo> {
                               ColorFilter.mode(Colors.black, BlendMode.srcIn),
                         ),
                         Text(
-                          "unlmited",
+                          "unlimited",
                           style: TextStyle(
                             fontFamily: GoogleFonts.inter().fontFamily,
                             fontSize: 10,

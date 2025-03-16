@@ -1,3 +1,4 @@
+import 'package:adwis_frontend/pages/unlimited/go_unlimited.dart';
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/homepage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,6 +39,7 @@ class _AppState extends ConsumerState<App> {
       routes: {
         "/homepage": (context) => Homepage(),
         "/auth": (context) => isAuth ? AccountManagment() : AuthScreen(),
+        "/unlimited": (context) => GoUnlimited(),
       },
     );
   }
