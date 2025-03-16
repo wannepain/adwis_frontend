@@ -28,8 +28,11 @@ class AuthService {
     final Map? subscription =
         await FirebaseService().getSubscription(user!.uid);
     print("sbubscription: $subscription");
-    final isUnlimited =
-        subscription != null ? subscription["subscriptionActive"] : false;
+    final isUnlimited = subscription != null
+        ? subscription["subscriptionActive"] != null
+            ? subscription["subscriptionActive"]
+            : false
+        : false;
     print("isUnlimited: $isUnlimited");
     if (user != null) {
       return {

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class PaymentButton extends StatelessWidget {
+  final onTap;
+  PaymentButton({super.key, required this.onTap});
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -10,36 +13,41 @@ class PaymentButton extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.85,
       child: Column(
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 12,
-            ),
-            decoration: BoxDecoration(
-              color: HexToRgba().convert("33658A", 1),
-              boxShadow: [
-                BoxShadow(
-                  color: HexToRgba().convert("33658A", 1),
-                  blurRadius: 4,
-                  offset: Offset.zero,
-                ),
-              ],
-              borderRadius: BorderRadius.all(Radius.circular(9)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "7-day free trial",
-                  style: TextStyle(
-                    fontFamily: GoogleFonts.inter().fontFamily,
-                    fontSize: 24,
-                    color: HexToRgba().convert("FCFEFF", 1),
-                    fontWeight: FontWeight.w400,
-                    decoration: TextDecoration.none,
+          GestureDetector(
+            onTap: () {
+              onTap();
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                vertical: 12,
+              ),
+              decoration: BoxDecoration(
+                color: HexToRgba().convert("33658A", 1),
+                boxShadow: [
+                  BoxShadow(
+                    color: HexToRgba().convert("33658A", 1),
+                    blurRadius: 4,
+                    offset: Offset.zero,
                   ),
-                ),
-              ],
+                ],
+                borderRadius: BorderRadius.all(Radius.circular(9)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "7-day free trial",
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.inter().fontFamily,
+                      fontSize: 24,
+                      color: HexToRgba().convert("FCFEFF", 1),
+                      fontWeight: FontWeight.w400,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Text(

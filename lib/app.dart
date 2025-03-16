@@ -1,4 +1,5 @@
 import 'package:adwis_frontend/pages/unlimited/go_unlimited.dart';
+import 'package:adwis_frontend/services/payments_service.dart';
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/homepage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,10 +23,12 @@ class _AppState extends ConsumerState<App> {
   void initState() {
     super.initState();
     initFunction();
+    PaymentsService().init(context);
   }
 
   @override
   void dispose() {
+    PaymentsService().dispose();
     super.dispose();
   }
 
@@ -33,13 +36,15 @@ class _AppState extends ConsumerState<App> {
   Widget build(BuildContext context) {
     final userData = ref.watch(userProvider);
     final isAuth = userData["uid"] != null;
+    final isUnlimited = userData["isUnlimited"];
     return MaterialApp(
       title: 'Adwis',
       home: Homepage(),
       routes: {
         "/homepage": (context) => Homepage(),
         "/auth": (context) => isAuth ? AccountManagment() : AuthScreen(),
-        "/unlimited": (context) => GoUnlimited(),
+        "/unlimited": (context) =>
+            isUnlimited ? AccountManagment() : GoUnlimited(),
       },
     );
   }

@@ -2,10 +2,39 @@ import 'package:adwis_frontend/pages/unlimited/utils/adwis_unlimited_logo.dart';
 import 'package:adwis_frontend/pages/unlimited/utils/benefits.dart';
 import 'package:adwis_frontend/pages/unlimited/utils/header.dart';
 import 'package:adwis_frontend/pages/unlimited/utils/payment_button.dart';
+import 'package:adwis_frontend/providers/user_provider.dart';
+import 'package:adwis_frontend/services/payments_service.dart';
 import 'package:adwis_frontend/utils/functions/hex_to_rgba.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class GoUnlimited extends StatelessWidget {
+class GoUnlimited extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<GoUnlimited> createState() => _GoUnlimitedState();
+}
+
+class _GoUnlimitedState extends ConsumerState<GoUnlimited> {
+  void onTap() {
+    if (_paymentsService.products.isNotEmpty) {
+      _paymentsService.buy(_paymentsService.products[0]);
+      ref.read(userProvider.notifier).getUserData();
+    }
+  }
+
+  final PaymentsService _paymentsService = PaymentsService();
+
+  @override
+  void initState() {
+    super.initState();
+    _paymentsService.init(context);
+  }
+
+  @override
+  void dispose() {
+    _paymentsService.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +58,9 @@ class GoUnlimited extends StatelessWidget {
                 SizedBox(
                   height: 50,
                 ),
-                PaymentButton(),
+                PaymentButton(
+                  onTap: onTap,
+                ),
                 SizedBox(
                   height: 42,
                 ),
