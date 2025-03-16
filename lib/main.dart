@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:adwis_frontend/app.dart';
+import 'package:adwis_frontend/services/firebase_service.dart';
 
 const stripePublishableKey =
     "pk_test_51QpkBuGg7dfr3NgwNbbGJXQ8aJH9JrL8OIF8wXVvxE8y25soDdtnqUc26S7IqLSqeV8KCbk1OrrjHkZfxxhkikZS00PmavGBFg";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await FirebaseService().inicializeFirebase();
   runApp(const MainApp());
 }
 

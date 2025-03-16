@@ -1,18 +1,20 @@
+import 'package:adwis_frontend/providers/history_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:adwis_frontend/services/chatbot_service.dart';
 
-class CareerCard extends StatefulWidget {
+class CareerCard extends ConsumerStatefulWidget {
   final List history;
   final double size;
 
   CareerCard({super.key, required this.history, this.size = 200});
 
   @override
-  State<CareerCard> createState() => _CareerCardState();
+  ConsumerState<CareerCard> createState() => _CareerCardState();
 }
 
-class _CareerCardState extends State<CareerCard> {
+class _CareerCardState extends ConsumerState<CareerCard> {
   List data = [];
   String salary = "";
   String title = "";
@@ -32,6 +34,8 @@ class _CareerCardState extends State<CareerCard> {
       title = response["Career_Name"] ?? "";
       description = response["Description"] ?? "";
     });
+
+    ref.read(historyProvider.notifier).addToFile(response);
 
     // Delay animation slightly to allow UI build
     Future.delayed(Duration(milliseconds: 200), () {

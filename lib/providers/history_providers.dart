@@ -23,28 +23,28 @@ class HistoryNotifier extends StateNotifier<Map> {
     }
   }
 
-  Future<void> addToFile(List history) async {
+  Future<void> addToFile(Map career_result) async {
     final file = await _localFile;
     try {
       if (await file.exists()) {
         final contents = await file.readAsString();
         final oldData = jsonDecode(contents);
-        List histories = oldData["data"] ?? [];
-        if (histories.length < 5) {
-          histories.add(history);
+        List careers = oldData["data"] ?? [];
+        if (careers.length < 5) {
+          careers.add(career_result);
         } else {
-          histories.removeAt(0);
-          histories.add(history);
+          careers.removeAt(0);
+          careers.add(career_result);
         }
         final newData = {
-          "data": histories,
+          "data": careers,
         };
         await file.writeAsString(jsonEncode(newData));
         state = newData;
       } else {
-        List histories = [history];
+        List careers = [career_result];
         final newData = {
-          "data": histories,
+          "data": careers,
         };
         await file.writeAsString(jsonEncode(newData));
         state = newData;

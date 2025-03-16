@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:adwis_frontend/utils/alert.dart';
 import 'package:adwis_frontend/providers/restart_provider.dart';
 import 'package:adwis_frontend/providers/history_providers.dart';
+import 'package:adwis_frontend/pages/user/user_buton.dart';
 
 class Homepage extends ConsumerStatefulWidget {
   bool forceOpenAuth;
@@ -53,9 +54,6 @@ class _HomepageState extends ConsumerState<Homepage> {
 
   void restartConversation() {
     final numOfRestarts = ref.read(restartProvider);
-    ref
-        .read(historyProvider.notifier)
-        .addToFile(history.sublist(0, history.length - 1));
     if (numOfRestarts < 5) {
       setState(() {
         history = [];
@@ -66,7 +64,7 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   void setData() async {
-    if (history.length > 10) {
+    if (history.length > 5) {
       history.add({"end": true});
     } else {
       Map result = await ChatbotService().chatbotRespond(
@@ -123,6 +121,11 @@ class _HomepageState extends ConsumerState<Homepage> {
                   ),
                 ),
               ),
+            Positioned(
+              right: 12,
+              top: (MediaQuery.of(context).size.height / 5) * 2,
+              child: UserButton(),
+            ),
           ],
         ),
       ),
