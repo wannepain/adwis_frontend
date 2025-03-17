@@ -66,6 +66,14 @@
           }
         },
         {
+          "client_id": "563539782861-ocroufrd3pps8ojah9h7155gc2d4a1i0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wannepain.adwis",
+            "certificate_hash": "1cb9cce8380e1545fc3b674e5a68c896ad928b04"
+          }
+        },
+        {
           "client_id": "563539782861-hipc2gj9atusts2cfk16amibvkrc9v3l.apps.googleusercontent.com",
           "client_type": 3
         }
