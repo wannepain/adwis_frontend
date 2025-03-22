@@ -1,3 +1,5 @@
+import 'package:adwis_frontend/pages/home/walktrough_home/walktrough_home.dart';
+import 'package:adwis_frontend/providers/utils/walktrough_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/sub/homepage_ui.dart';
 import 'package:adwis_frontend/services/chatbot_service.dart';
@@ -93,6 +95,7 @@ class _HomepageState extends ConsumerState<Homepage> {
   @override
   Widget build(BuildContext context) {
     final numOfRestarts = ref.watch(restartProvider);
+    final currentTutorialStep = ref.watch(walkthroughProvider);
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(6),
@@ -124,7 +127,17 @@ class _HomepageState extends ConsumerState<Homepage> {
             Positioned(
               right: 12,
               top: (MediaQuery.of(context).size.height / 5) * 2,
-              child: UserButton(),
+              child: Row(
+                children: [
+                  if (currentTutorialStep == 1)
+                    WalkthroughHome(
+                      text: "Here you can manage your account",
+                      orientation: "right",
+                      totalIncrements: 2,
+                    ),
+                  UserButton(),
+                ],
+              ),
             ),
           ],
         ),

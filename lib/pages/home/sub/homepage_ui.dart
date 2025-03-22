@@ -1,3 +1,5 @@
+import 'package:adwis_frontend/pages/home/walktrough_home/walktrough_home.dart';
+import 'package:adwis_frontend/providers/utils/walktrough_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/sub/chat_buble.dart';
 import 'package:adwis_frontend/utils/loader_center.dart';
@@ -5,8 +7,9 @@ import 'package:adwis_frontend/pages/home/sub/career/career_card.dart';
 import 'package:adwis_frontend/pages/home/sub/career/restart_conv_button.dart';
 import 'package:adwis_frontend/pages/home/sub/text_input.dart';
 import 'package:adwis_frontend/pages/home/sub/overlay_logo.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomepageUi extends StatelessWidget {
+class HomepageUi extends ConsumerWidget {
   final ScrollController scrollController;
   final List history;
   final Function restartConversation;
@@ -22,7 +25,8 @@ class HomepageUi extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final increment = ref.watch(walkthroughProvider);
     if (history.isEmpty) {
       return Scaffold(
         backgroundColor: Color.fromRGBO(252, 254, 255, 1),
@@ -85,7 +89,17 @@ class HomepageUi extends StatelessWidget {
                     restart: restartConversation,
                     numOfRestarts: numOfRestarts,
                   )
-                : TextInput(returnText: returnText),
+                : Column(
+                    children: [
+                      if (increment == 0)
+                        WalkthroughHome(
+                          text: "Here you can chat with adwis",
+                          orientation: "bottom",
+                          totalIncrements: 2,
+                        ),
+                      TextInput(returnText: returnText),
+                    ],
+                  ),
             OverlayLogo(),
           ],
         ),

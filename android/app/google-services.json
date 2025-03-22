@@ -58,6 +58,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "563539782861-gdqk1satttkv7tu8akk1upqk7h1dhe3u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wannepain.adwis",
+            "certificate_hash": "1124eda5c39b17322f31a3b7125b616304f2f905"
+          }
+        },
+        {
           "client_id": "563539782861-mfg6cfej587kl7tiqha69fkhs2s4r07h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
