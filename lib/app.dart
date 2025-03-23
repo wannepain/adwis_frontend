@@ -8,7 +8,8 @@ import 'package:adwis_frontend/providers/user_provider.dart';
 import 'package:adwis_frontend/pages/user/account_managment.dart';
 
 class App extends ConsumerStatefulWidget {
-  const App({super.key});
+  final snackBarKey;
+  const App({super.key, required this.snackBarKey});
 
   @override
   ConsumerState<App> createState() => _AppState();
@@ -23,7 +24,7 @@ class _AppState extends ConsumerState<App> {
   void initState() {
     super.initState();
     initFunction();
-    PaymentsService().init(context);
+    PaymentsService().init(context, ref);
   }
 
   @override
@@ -39,6 +40,7 @@ class _AppState extends ConsumerState<App> {
     final isUnlimited = userData["isUnlimited"];
     return MaterialApp(
       title: 'Adwis',
+      scaffoldMessengerKey: widget.snackBarKey,
       home: Homepage(),
       routes: {
         "/homepage": (context) => Homepage(),

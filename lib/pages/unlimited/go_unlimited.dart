@@ -14,10 +14,11 @@ class GoUnlimited extends ConsumerStatefulWidget {
 }
 
 class _GoUnlimitedState extends ConsumerState<GoUnlimited> {
-  void onTap() {
+  void onTap() async {
     if (_paymentsService.products.isNotEmpty) {
-      _paymentsService.buy(_paymentsService.products[0]);
-      ref.read(userProvider.notifier).getUserData();
+      await _paymentsService.buy(_paymentsService.products[0]);
+      await ref.read(userProvider.notifier).getUserDataNoUpdate();
+      Navigator.of(context).pushReplacementNamed("/homepage");
     }
   }
 
@@ -26,7 +27,7 @@ class _GoUnlimitedState extends ConsumerState<GoUnlimited> {
   @override
   void initState() {
     super.initState();
-    _paymentsService.init(context);
+    _paymentsService.init(context, ref);
   }
 
   @override

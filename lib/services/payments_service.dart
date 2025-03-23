@@ -1,82 +1,10 @@
-// import 'package:flutter/material.dart';
-// import 'package:in_app_purchase/in_app_purchase.dart';
-// import 'dart:async';
-
-// class PaymentsService {
-//   late StreamSubscription<dynamic> _subscription;
-//   InAppPurchase _inAppPurchase = InAppPurchase.instance;
-//   List<ProductDetails> _products = [];
-//   final _variants = {"Adwis unlimited"};
-
-//   void init(BuildContext context) {
-//     final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
-//     _subscription = purchaseUpdated.listen((purchaseDetailsList) {
-//       _listenToPurchaseUpdated(purchaseDetailsList, context);
-//     }, onDone: () {
-//       _subscription.cancel();
-//     }, onError: (error) {
-//       // handle error here.
-//       print(error);
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(
-//           content: Text("Error"),
-//         ),
-//       );
-//     });
-//     _initStore();
-//   }
-
-//   void dispose() {
-//     _subscription.cancel();
-//   }
-
-//   void buy() {
-//     final PurchaseParam param = PurchaseParam(productDetails: _products[0]);
-//     _inAppPurchase.buyConsumable(purchaseParam: param);
-//   }
-
-//   void _initStore() async {
-//     ProductDetailsResponse productDetailsResponse =
-//         await _inAppPurchase.queryProductDetails(_variants);
-//     if (productDetailsResponse.error == null) {
-//       _products = productDetailsResponse.productDetails;
-//     }
-//   }
-
-//   void _listenToPurchaseUpdated(
-//       List<PurchaseDetails> purchaseDetailsList, BuildContext context) {
-//     purchaseDetailsList.forEach(
-//       (PurchaseDetails purchaseDetails) {
-//         if (purchaseDetails.status == PurchaseStatus.pending) {
-//           // pending execution
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             const SnackBar(
-//               content: Text("Pedning"),
-//             ),
-//           );
-//         } else if (purchaseDetails.status == PurchaseStatus.error) {
-//           //handle error
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             const SnackBar(
-//               content: Text("Oops! An error occured"),
-//             ),
-//           );
-//         } else if (purchaseDetails.status == PurchaseStatus.purchased) {
-//           // success
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             const SnackBar(
-//               content: Text("Success!"),
-//             ),
-//           );
-//         }
-//       },
-//     );
-//   }
-// }
 import 'dart:async';
+import 'package:adwis_frontend/providers/user_provider.dart';
+import 'package:adwis_frontend/utils/snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 class PaymentsService {
@@ -86,12 +14,12 @@ class PaymentsService {
   final Set<String> _variants = {"adwis_unlimited"};
 
   /// Initializes the payment service
-  void init(BuildContext context) {
+  void init(BuildContext context, WidgetRef ref) {
     final Stream<List<PurchaseDetails>> purchaseUpdated =
         _inAppPurchase.purchaseStream;
     _subscription = purchaseUpdated.listen(
       (purchaseDetailsList) {
-        _listenToPurchaseUpdated(purchaseDetailsList, context);
+        _listenToPurchaseUpdated(purchaseDetailsList, context, ref);
       },
       onDone: () {
         _subscription.cancel();
@@ -129,20 +57,19 @@ class PaymentsService {
   }
 
   /// Initiates a purchase of a subscription
-  void buy(ProductDetails productDetails) {
+  Future<void> buy(ProductDetails productDetails) async {
     final PurchaseParam purchaseParam =
         PurchaseParam(productDetails: productDetails);
-    _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
+    await _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
   }
 
   /// Handles purchase updates
-  void _listenToPurchaseUpdated(
-      List<PurchaseDetails> purchaseDetailsList, BuildContext context) {
+  void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList,
+      BuildContext context, WidgetRef ref) {
     for (var purchaseDetails in purchaseDetailsList) {
       switch (purchaseDetails.status) {
         case PurchaseStatus.pending:
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Purchase Pending...")));
+          showCustomSnackBar("Your purchase is pending");
           break;
         case PurchaseStatus.purchased:
           _verifyPurchase(purchaseDetails, context);
@@ -152,15 +79,13 @@ class PaymentsService {
           final userId = FirebaseAuth.instance.currentUser?.uid;
 
           // Store in Firebase
-          _storeSubscriptionInFirebase(userId, productId, purchaseToken);
+          _storeSubscriptionInFirebase(userId, productId, purchaseToken, ref);
           break;
         case PurchaseStatus.restored:
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text("Purchase Restored")));
+          showCustomSnackBar("Your purchase has been restored");
           break;
         case PurchaseStatus.error:
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text("Purchase Error!")));
+          showCustomSnackBar("Error processing purchase");
           break;
         default:
           break;
@@ -175,8 +100,7 @@ class PaymentsService {
   void _verifyPurchase(PurchaseDetails purchaseDetails, BuildContext context) {
     // Here, you should verify the purchase on your backend server.
     // For testing purposes, we assume it’s valid.
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text("Purchase Successful!")));
+    showCustomSnackBar("Purchase successful!");
   }
 
   /// Restores previous purchases (useful for subscriptions)
@@ -190,10 +114,15 @@ class PaymentsService {
   }
 
   Future<void> _storeSubscriptionInFirebase(
-      String? userId, String productId, String purchaseToken) async {
+    String? userId,
+    String productId,
+    String purchaseToken,
+    WidgetRef ref,
+  ) async {
     if (userId == null) return;
 
     final docRef = FirebaseFirestore.instance.collection('users').doc(userId);
+    ref.read(userProvider.notifier).updateToken(purchaseToken);
     await docRef.update({
       'productId': productId,
       'purchaseToken': purchaseToken,

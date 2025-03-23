@@ -6,6 +6,8 @@ import 'package:adwis_frontend/services/firebase_service.dart';
 const stripePublishableKey =
     "pk_test_51QpkBuGg7dfr3NgwNbbGJXQ8aJH9JrL8OIF8wXVvxE8y25soDdtnqUc26S7IqLSqeV8KCbk1OrrjHkZfxxhkikZS00PmavGBFg";
 
+final GlobalKey<ScaffoldMessengerState> snackbarKey =
+    GlobalKey<ScaffoldMessengerState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FirebaseService().inicializeFirebase();
@@ -17,6 +19,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ProviderScope(child: App());
+    return ProviderScope(
+        child: App(
+      snackBarKey: snackbarKey,
+    ));
   }
 }
