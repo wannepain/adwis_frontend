@@ -44,8 +44,10 @@ class _SubscriptionDisplayState extends ConsumerState<SubscriptionDisplay> {
     final data = ref.watch(userProvider);
     final isUnlimited = data["isUnlimited"];
     final subscriptionData = data["subscriptionData"];
+    print("subscription data: $subscriptionData");
     if (subscriptionData != null) {
       final unixTimeStamp = subscriptionData["nextCharge"];
+      print("unixTimeStamp: $unixTimeStamp");
       if (unixTimeStamp != null) {
         final date = DateTime.fromMillisecondsSinceEpoch(unixTimeStamp * 1000);
         final day = date.day;

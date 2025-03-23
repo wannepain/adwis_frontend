@@ -30,6 +30,17 @@ class FirebaseService {
     }
   }
 
+  // Future<String?> getPurchaseToken(String uid) async {
+  //   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  //   final DocumentSnapshot<Map<String, dynamic>> snapshot =
+  //       await _firestore.collection("users").doc(uid).get();
+  //   if (snapshot.exists) {
+  //     return snapshot.data()!["purchaseToken"];
+  //   } else {
+  //     return null;
+  //   }
+  // }
+
   Future<User?> signInWithCredential(AuthCredential credential) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     try {

@@ -31,14 +31,18 @@ class UserNotifier extends StateNotifier<Map> {
     //make request to api for latest data on payments
     if (state["purhcaseToken"] == null) {
       Map userData = await AuthService().getUserData();
+      //get purchase token from firebase, check whether is valid with api
+      final Map? apiResult = await ApiService().checkSubscription(
+        uid: userData["uid"],
+        token: userData["purchaseToken"],
+      );
       state = {
         ...userData,
-        "subscriptionData": null,
-        "purhcaseToken": null,
+        "subscriptionData": apiResult!["subscriptionActive"] ? apiResult : null,
+        "purhcaseToken": state["purhcaseToken"],
       };
       return;
     } else {
-      print("token in user provider: ${state["purhcaseToken"]}");
       final Map? apiResult = await ApiService().checkSubscription(
         uid: state["uid"],
         token: state["purhcaseToken"],

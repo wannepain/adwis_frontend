@@ -27,13 +27,19 @@ class AuthService {
     final User? user = await FirebaseService().getUserData();
     final Map? subscription =
         await FirebaseService().getSubscription(user!.uid);
-    print("sbubscription: $subscription");
     final isUnlimited = subscription != null
         ? subscription["subscriptionActive"] != null
             ? subscription["subscriptionActive"]
             : false
         : false;
-    print("isUnlimited: $isUnlimited");
+
+    // Map? subscriptionData = {
+    //   "subcriptionActive": subscription!["subscriptionActive"],
+    //   "nextCharge": subscription!["nextCharge"],
+    //   "subscriptionType": subscription!["subscriptionType"],
+    // };
+    String? purchaseToken = subscription!["purchaseToken"];
+    print("purchaseToken: $purchaseToken");
     if (user != null) {
       return {
         "uid": user.uid,
@@ -41,6 +47,8 @@ class AuthService {
         "displayName": user.displayName,
         "photoURL": user.photoURL,
         "isUnlimited": isUnlimited,
+        "purchaseToken": purchaseToken,
+        // "subscriptionData": subscriptionData,
       };
     }
     return {
