@@ -1,3 +1,4 @@
+import 'package:adwis_frontend/pages/home/sub/career/career_button.dart';
 import 'package:adwis_frontend/providers/history_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,8 +8,17 @@ import 'package:adwis_frontend/services/chatbot_service.dart';
 class CareerCard extends ConsumerStatefulWidget {
   final List history;
   final double size;
-
-  CareerCard({super.key, required this.history, this.size = 200});
+  final Function onCareerAccept;
+  final Function onCareerDecline;
+  final bool? declined;
+  CareerCard({
+    super.key,
+    required this.history,
+    this.size = 200,
+    required this.onCareerAccept,
+    required this.onCareerDecline,
+    this.declined = null,
+  });
 
   @override
   ConsumerState<CareerCard> createState() => _CareerCardState();
@@ -31,8 +41,9 @@ class _CareerCardState extends ConsumerState<CareerCard> {
 
     setState(() {
       salary = "$startingSalary";
-      title = response["Career_Name"] ?? "";
-      description = response["Description"] ?? "";
+      title = response["Career_Name"] == null ? "" : response["Career_Name"];
+      description =
+          response["Description"] == null ? "" : response["Description"];
     });
 
     ref.read(historyProvider.notifier).addToFile(response);
@@ -54,92 +65,144 @@ class _CareerCardState extends ConsumerState<CareerCard> {
   @override
   Widget build(BuildContext context) {
     double c_width = MediaQuery.of(context).size.width * 0.6;
+    print("widget.declined ${widget.declined}");
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AnimatedOpacity(
-          duration: Duration(milliseconds: 300),
-          opacity: opacityLevel,
-          child: Container(
-            width: c_width,
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(9)),
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromRGBO(143, 198, 238, 0.5),
-                  offset: Offset(0, 0),
-                  blurRadius: 10,
-                  spreadRadius: 0,
+        Column(
+          children: [
+            AnimatedOpacity(
+              duration: Duration(milliseconds: 300),
+              opacity: opacityLevel,
+              child: Container(
+                width: c_width,
+                padding: EdgeInsets.all(10),
+                margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(9)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromRGBO(143, 198, 238, 0.5),
+                      offset: Offset(0, 0),
+                      blurRadius: 10,
+                      spreadRadius: 0,
+                    ),
+                  ],
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/degree_2.jpg"),
+                    colorFilter: ColorFilter.mode(
+                      Colors.black.withAlpha(100),
+                      BlendMode.srcATop,
+                    ),
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ],
-              image: DecorationImage(
-                image: AssetImage("assets/images/degree_2.jpg"),
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withAlpha(100),
-                  BlendMode.srcATop,
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: IntrinsicHeight(
-              child: Column(
-                children: [
-                  SizedBox(height: widget.size),
-                  IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: ((c_width - 20) / 3) * 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                title,
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: Color.fromRGBO(252, 254, 255, 1),
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: GoogleFonts.inter().fontFamily,
-                                ),
+                child: IntrinsicHeight(
+                  child: Column(
+                    children: [
+                      SizedBox(height: widget.size),
+                      IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: ((c_width - 20) / 3) * 2,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    title,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      color: Color.fromRGBO(252, 254, 255, 1),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily:
+                                          GoogleFonts.inter().fontFamily,
+                                    ),
+                                  ),
+                                  SizedBox(height: 6),
+                                  Text(
+                                    description,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w300,
+                                      color: Color.fromRGBO(252, 254, 255, 0.7),
+                                      fontFamily:
+                                          GoogleFonts.inter().fontFamily,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 6),
-                              Text(
-                                description,
-                                textAlign: TextAlign.start,
+                            ),
+                            Container(
+                              width: (c_width - 20) / 3,
+                              alignment: Alignment.center,
+                              child: Text(
+                                "\$$salary",
                                 style: TextStyle(
                                   fontSize: 12,
-                                  fontWeight: FontWeight.w300,
-                                  color: Color.fromRGBO(252, 254, 255, 0.7),
+                                  fontWeight: FontWeight.w800,
+                                  color: Color.fromRGBO(252, 254, 255, 1),
                                   fontFamily: GoogleFonts.inter().fontFamily,
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          width: (c_width - 20) / 3,
-                          alignment: Alignment.center,
-                          child: Text(
-                            "\$$salary",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
-                              color: Color.fromRGBO(252, 254, 255, 1),
-                              fontFamily: GoogleFonts.inter().fontFamily,
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+            widget.declined == null
+                ? Row(
+                    children: [
+                      SizedBox(
+                        child: CareerButton(
+                          type: "yes",
+                          onPressed: widget.onCareerAccept,
+                        ),
+                        width: c_width * 0.59,
+                      ),
+                      SizedBox(
+                        width: c_width * 0.01,
+                      ),
+                      SizedBox(
+                        child: CareerButton(
+                          type: "no",
+                          onPressed: widget.onCareerDecline,
+                        ),
+                        width: c_width * 0.40,
+                      ),
+                    ],
+                  )
+                : widget.declined == true
+                    ? Row(
+                        children: [
+                          SizedBox(
+                            child: CareerButton(
+                              type: "no",
+                              onPressed: () {},
+                            ),
+                            width: c_width,
+                          ),
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          SizedBox(
+                            child: CareerButton(
+                              type: "yes",
+                              onPressed: () {},
+                            ),
+                            width: c_width,
+                          ),
+                        ],
+                      ),
+          ],
         ),
       ],
     );

@@ -1,7 +1,8 @@
 import "package:dio/dio.dart";
 
 class ChatbotService {
-  final url = "https://adwisbackend-563539782861.us-central1.run.app";
+  // final url = "https://adwisbackend-563539782861.us-central1.run.app";
+  final url = "https://fd4c-45-84-122-27.ngrok-free.app";
   final dio = Dio();
 
   ChatbotService();
@@ -9,7 +10,7 @@ class ChatbotService {
   Future<Map> chatbotRespond({required List history}) async {
     try {
       final response =
-          await dio.post("$url/respond", data: {"history": history});
+          await dio.post("$url/respond/unlimited", data: {"history": history});
 
       return {
         "history": response.data['history'],
@@ -24,7 +25,7 @@ class ChatbotService {
   Future<Map> getCareer({required history}) async {
     try {
       final response =
-          await dio.post("$url/career", data: {"history": history});
+          await dio.post("$url/career/unlimited", data: {"history": history});
       return response.data["career"];
     } catch (e) {
       print('Error: $e');

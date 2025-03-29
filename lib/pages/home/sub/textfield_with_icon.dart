@@ -1,8 +1,14 @@
+import 'package:adwis_frontend/utils/functions/hex_to_rgba.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TextFieldWithIcon extends StatelessWidget {
-  TextFieldWithIcon({super.key, required this.returnText});
+  final bool isDisabled;
+  TextFieldWithIcon({
+    super.key,
+    required this.returnText,
+    required this.isDisabled,
+  });
 
   String _text = '';
 
@@ -22,7 +28,10 @@ class TextFieldWithIcon extends StatelessWidget {
       children: [
         Expanded(
           child: TextField(
-            cursorColor: Color.fromRGBO(51, 101, 138, 1),
+            enabled: !isDisabled,
+            cursorColor: isDisabled
+                ? HexToRgba().convert("33658A", 0.50)
+                : HexToRgba().convert("33658A", 1),
             //controller: _controller,
             onChanged: (value) {
               _text = value;
@@ -42,10 +51,15 @@ class TextFieldWithIcon extends StatelessWidget {
         IconButton(
           icon: Icon(
             Icons.send,
-            color: Color.fromRGBO(8, 7, 5, 1),
+            color: isDisabled
+                ? HexToRgba().convert("080705", 0.50)
+                : HexToRgba().convert("080705", 1),
             size: 32,
           ),
           onPressed: () {
+            if (isDisabled) {
+              return;
+            }
             returnText(_text);
             clearText();
           },

@@ -1,3 +1,4 @@
+import 'package:adwis_frontend/pages/speech/main_speech.dart';
 import 'package:adwis_frontend/pages/unlimited/go_unlimited.dart';
 import 'package:adwis_frontend/services/payments_service.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,8 @@ class _AppState extends ConsumerState<App> {
         "/auth": (context) => isAuth ? AccountManagment() : AuthScreen(),
         "/unlimited": (context) =>
             isUnlimited ? AccountManagment() : GoUnlimited(),
+        "/speech": (context) =>
+            MainSpeech(), //only for unlimited users, add a check here
       },
     );
   }

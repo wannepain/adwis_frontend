@@ -1,4 +1,5 @@
 import 'package:adwis_frontend/pages/home/walktrough_home/walktrough_home.dart';
+// import 'package:adwis_frontend/pages/speech/utils/open_speech_button.dart';
 import 'package:adwis_frontend/providers/utils/walktrough_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/sub/chat_buble.dart';
@@ -13,15 +14,19 @@ class HomepageUi extends ConsumerWidget {
   final ScrollController scrollController;
   final List history;
   final Function restartConversation;
-  final Function returnText;
   final int numOfRestarts;
+  final Function onCareerDecline;
+  final Function onCareerAccept;
+  final Function returnText;
   HomepageUi({
     super.key,
     required this.scrollController,
     required this.history,
     required this.restartConversation,
-    required this.returnText,
     required this.numOfRestarts,
+    required this.onCareerDecline,
+    required this.onCareerAccept,
+    required this.returnText,
   });
 
   @override
@@ -50,11 +55,26 @@ class HomepageUi extends ConsumerWidget {
                     : history.length,
                 itemBuilder: (context, index) {
                   // If this is the last item and history.last["end"] == true, show CareerCard
-                  if (index == history.length && history.last["end"] == true) {
+                  if (history[index]["show_career"] != null &&
+                      history[index]["show_career"] == true) {
+                    final newHistory = history.sublist(0, history.length);
+                    newHistory.removeAt(index);
                     return CareerCard(
-                        history: history.sublist(0, history.length - 1));
+                      history: newHistory,
+                      onCareerAccept: onCareerAccept,
+                      onCareerDecline: onCareerDecline,
+                      declined: history[index]["declined"],
+                    );
                   }
-
+                  // if (history[index]["declined"] != null &&
+                  //     history[index]["declined"] == true) {
+                  //   // career declined message
+                  //   return ChatBuble(
+                  //     text: "Career declined",
+                  //     isMe: true,
+                  //     isFirst: index == 0,
+                  //   );
+                  // }
                   // Normal chat bubbles
                   var bot = history[index]['bot'] == null
                       ? ""
@@ -64,6 +84,7 @@ class HomepageUi extends ConsumerWidget {
                       : history[index]['client'];
 
                   List<Widget> toReturn = [];
+
                   if (bot.isNotEmpty) {
                     print(index == 0);
                     toReturn.add(ChatBuble(
@@ -84,22 +105,25 @@ class HomepageUi extends ConsumerWidget {
               ),
             ),
             // Restart button OR text input below CareerCard
-            history.isNotEmpty && history.last["end"] == true
-                ? RestartConvButton(
-                    restart: restartConversation,
-                    numOfRestarts: numOfRestarts,
-                  )
-                : Column(
-                    children: [
-                      if (increment == 0)
-                        WalkthroughHome(
-                          text: "Here you can chat with adwis",
-                          orientation: "bottom",
-                          totalIncrements: 2,
-                        ),
-                      TextInput(returnText: returnText),
-                    ],
+            IntrinsicHeight(
+              child: Column(
+                children: [
+                  if (increment == 0)
+                    WalkthroughHome(
+                      text: "Here you can chat with adwis",
+                      orientation: "bottom",
+                      totalIncrements: 2,
+                    ),
+                  TextInput(
+                    isDisabled: history.isNotEmpty &&
+                        history.last["end"] != null &&
+                        history.last["end"] == true,
+                    returnText: returnText,
                   ),
+                  SizedBox(width: 6.0),
+                ],
+              ),
+            ),
             OverlayLogo(),
           ],
         ),

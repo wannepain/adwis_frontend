@@ -1,26 +1,35 @@
+import 'package:adwis_frontend/utils/functions/hex_to_rgba.dart';
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/sub/textfield_with_icon.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TextInput extends StatelessWidget {
-  const TextInput({super.key, required this.returnText});
-
+class TextInput extends ConsumerWidget {
+  const TextInput(
+      {super.key, this.isDisabled = false, required this.returnText});
   final Function returnText;
+  final bool isDisabled;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 12),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Color.fromRGBO(51, 101, 138, 1),
+            color: isDisabled
+                ? HexToRgba().convert("33658A", 0.50)
+                : HexToRgba().convert("33658A", 1),
             width: 1,
           ),
-          color: Color.fromRGBO(237, 243, 248, 1),
+          color: isDisabled
+              ? HexToRgba().convert("EDF3F8", 0.5)
+              : HexToRgba().convert("EDF3F8", 1),
           borderRadius: BorderRadius.circular(9),
           boxShadow: [
             BoxShadow(
-              color: Color.fromRGBO(51, 101, 138, 0.7),
+              color: isDisabled
+                  ? HexToRgba().convert("33658A", 0.30)
+                  : HexToRgba().convert("33658A", 0.7),
               spreadRadius: 1,
               blurRadius: 4,
               offset: Offset(0, 0),
@@ -29,6 +38,7 @@ class TextInput extends StatelessWidget {
         ),
         child: TextFieldWithIcon(
           returnText: returnText,
+          isDisabled: isDisabled,
         ),
       ),
     );
