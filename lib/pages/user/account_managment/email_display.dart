@@ -50,6 +50,7 @@ class _EmailDisplayState extends ConsumerState<EmailDisplay> {
               color: HexToRgba().convert("#FCFEFF", 0.6),
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,14 +68,23 @@ class _EmailDisplayState extends ConsumerState<EmailDisplay> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          userData["email"] != null ? userData["email"] : "",
-                          style: TextStyle(
-                            fontSize: 20,
-                            decoration: TextDecoration.none,
-                            fontFamily: GoogleFonts.inter().fontFamily,
-                            color: Color.fromRGBO(51, 101, 138, 1),
-                            fontWeight: FontWeight.bold,
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.7,
+                          ),
+                          child: Container(
+                            child: Text(
+                              userData["email"] != null
+                                  ? userData["email"]
+                                  : "",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  decoration: TextDecoration.none,
+                                  fontFamily: GoogleFonts.inter().fontFamily,
+                                  color: Color.fromRGBO(51, 101, 138, 1),
+                                  fontWeight: FontWeight.bold,
+                                  overflow: TextOverflow.ellipsis),
+                            ),
                           ),
                         ),
                       ],

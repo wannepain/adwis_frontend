@@ -1,4 +1,5 @@
 import 'package:adwis_frontend/pages/home/walktrough_home/walktrough_home.dart';
+import 'package:adwis_frontend/providers/history_providers.dart';
 // import 'package:adwis_frontend/pages/speech/utils/open_speech_button.dart';
 import 'package:adwis_frontend/providers/utils/walktrough_provider.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +65,11 @@ class HomepageUi extends ConsumerWidget {
                       onCareerAccept: onCareerAccept,
                       onCareerDecline: onCareerDecline,
                       declined: history[index]["declined"],
+                      saveCareerResult: (career_result) {
+                        ref.read(historyProvider.notifier).addToFile(
+                              career_result,
+                            );
+                      },
                     );
                   }
                   // if (history[index]["declined"] != null &&

@@ -11,6 +11,7 @@ class CareerCard extends ConsumerStatefulWidget {
   final Function onCareerAccept;
   final Function onCareerDecline;
   final bool? declined;
+  final Function saveCareerResult;
   CareerCard({
     super.key,
     required this.history,
@@ -18,6 +19,7 @@ class CareerCard extends ConsumerStatefulWidget {
     required this.onCareerAccept,
     required this.onCareerDecline,
     this.declined = null,
+    required this.saveCareerResult,
   });
 
   @override
@@ -66,6 +68,14 @@ class _CareerCardState extends ConsumerState<CareerCard> {
   Widget build(BuildContext context) {
     double c_width = MediaQuery.of(context).size.width * 0.6;
     print("widget.declined ${widget.declined}");
+    if (widget.declined == false) {
+      final Map careerResult = {
+        "Starting_Salary": salary,
+        "Career_Name": title,
+        "Description": description,
+      };
+      widget.saveCareerResult(careerResult);
+    }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -186,6 +196,7 @@ class _CareerCardState extends ConsumerState<CareerCard> {
                             child: CareerButton(
                               type: "no",
                               onPressed: () {},
+                              isDisabled: true,
                             ),
                             width: c_width,
                           ),
@@ -197,6 +208,7 @@ class _CareerCardState extends ConsumerState<CareerCard> {
                             child: CareerButton(
                               type: "yes",
                               onPressed: () {},
+                              isDisabled: true,
                             ),
                             width: c_width,
                           ),
