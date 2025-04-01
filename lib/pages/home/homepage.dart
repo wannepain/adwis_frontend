@@ -1,6 +1,7 @@
 import 'package:adwis_frontend/pages/home/walktrough_home/walktrough_home.dart';
 import 'package:adwis_frontend/providers/history_managment_provider.dart';
 import 'package:adwis_frontend/providers/utils/walktrough_provider.dart';
+import 'package:adwis_frontend/services/dopamine_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/sub/homepage_ui.dart';
@@ -38,12 +39,14 @@ class _HomepageState extends ConsumerState<Homepage> {
     }
   }
 
-  void returnText(String text) {
+  void returnText(String text) async {
     final history = ref.watch(historyManagmentProvider)["show_history"];
     history[history.length - 1]['client'] = text;
     ref
         .watch(historyManagmentProvider.notifier)
         .updateHistory(show_history: history);
+
+    DopamineService().showCompliment(history: history);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToBottom();
@@ -99,15 +102,6 @@ class _HomepageState extends ConsumerState<Homepage> {
     ref.read(restartProvider.notifier).reset();
   }
 
-  // void onCareerAccept(career_result) async {
-  //   print("career accepted");
-  //   print("career_result $career_result");
-  //   await ref.read(historyProvider.notifier).addToFile(
-  //         career_result,
-  //       );
-  //   restartConversation();
-  //   //store accepted career in file history
-  // }
   void onCareerAccept(career_result) async {
     print("career accepted");
     print("career_result $career_result");

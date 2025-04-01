@@ -32,4 +32,19 @@ class ChatbotService {
       return {"history": null, "error": e};
     }
   }
+
+  Future<String?> getCompliment({required history}) async {
+    try {
+      final response = await dio.post(
+        "$url/compliment",
+        data: {
+          "history": history,
+        },
+      );
+      return response.data["compliment"];
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
 }
