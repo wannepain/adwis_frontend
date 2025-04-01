@@ -99,10 +99,27 @@ class _HomepageState extends ConsumerState<Homepage> {
     ref.read(restartProvider.notifier).reset();
   }
 
-  void onCareerAccept() {
+  // void onCareerAccept(career_result) async {
+  //   print("career accepted");
+  //   print("career_result $career_result");
+  //   await ref.read(historyProvider.notifier).addToFile(
+  //         career_result,
+  //       );
+  //   restartConversation();
+  //   //store accepted career in file history
+  // }
+  void onCareerAccept(career_result) async {
     print("career accepted");
+    print("career_result $career_result");
+
+    await ref.read(historyProvider.notifier).addToFile(career_result);
+
+    // Read back the file to ensure it's properly stored
+    await ref.read(historyProvider.notifier).readHistory();
+    print("career history ${ref.read(historyProvider)["data"]}");
+
+    // Now restart conversation
     restartConversation();
-    //store accepted career in file history
   }
 
   void onCareerDecline() async {

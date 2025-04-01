@@ -1,5 +1,6 @@
 import 'package:adwis_frontend/pages/speech/main_speech.dart';
 import 'package:adwis_frontend/pages/unlimited/go_unlimited.dart';
+import 'package:adwis_frontend/providers/history_providers.dart';
 import 'package:adwis_frontend/services/payments_service.dart';
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/homepage.dart';
@@ -19,6 +20,7 @@ class App extends ConsumerStatefulWidget {
 class _AppState extends ConsumerState<App> {
   void initFunction() async {
     await ref.read(userProvider.notifier).getUserData();
+    await ref.read(historyProvider.notifier).clean();
   }
 
   @override

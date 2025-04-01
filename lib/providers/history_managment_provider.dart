@@ -23,35 +23,6 @@ class HistoryManagmentNotifier extends StateNotifier<Map> {
     };
   }
 
-  // Map updateSendHistory({required List send_history}) {
-  //   final newHistory = List.from(send_history); // Create a copy
-
-  //   final showHistory = state["show_history"];
-  //   int indexOfCareer = showHistory.indexWhere(
-  //     (element) => element["show_career"] == true,
-  //   );
-  //   final List<int> whereToShowCareer = [];
-  //   while (indexOfCareer != -1) {
-  //     //removes all {show_career: true} and adds index of them to the list
-  //     whereToShowCareer.add(indexOfCareer);
-  //     showHistory.removeAt(indexOfCareer);
-  //     indexOfCareer =
-  //         showHistory.indexWhere((element) => element["show_career"] == true);
-  //   }
-
-  //   for (var index in whereToShowCareer) {
-  //     newHistory.insert(
-  //       index,
-  //       {"show_career": true},
-  //     ); //adds back the career suggestion
-  //   }
-  //   final result = this.updateHistory(show_history: newHistory);
-  //   return {
-  //     "show_history": result["show_history"],
-  //     "send_history": result["send_history"],
-  //   };
-  // }
-
   Map updateSendHistory({required List send_history}) {
     final newHistory = List.from(send_history); // Create a copy
 

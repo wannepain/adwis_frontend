@@ -46,6 +46,7 @@ class TextFieldWithIcon extends StatelessWidget {
             maxLines: null,
             keyboardType: TextInputType.multiline,
             controller: textField,
+            autocorrect: true,
           ),
         ),
         IconButton(

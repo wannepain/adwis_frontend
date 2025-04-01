@@ -23,34 +23,71 @@ class HistoryNotifier extends StateNotifier<Map> {
     }
   }
 
+  // Future<void> addToFile(Map career_result) async {
+  //   final file = await _localFile;
+  //   try {
+  //     if (await file.exists()) {
+  //       final contents = await file.readAsString();
+  //       final oldData = jsonDecode(contents);
+  //       List careers = oldData["data"] ?? [];
+  //       if (careers.length < 5) {
+  //         careers.add(career_result);
+  //       } else {
+  //         careers.removeAt(0);
+  //         careers.add(career_result);
+  //       }
+  //       final newData = {
+  //         "data": careers,
+  //       };
+  //       await file.writeAsString(jsonEncode(newData));
+  //       state = newData;
+  //     } else {
+  //       List careers = [career_result];
+  //       final newData = {
+  //         "data": careers,
+  //       };
+  //       await file.writeAsString(jsonEncode(newData));
+  //       state = newData;
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
   Future<void> addToFile(Map career_result) async {
     final file = await _localFile;
     try {
+      Map<String, dynamic> newData;
+
       if (await file.exists()) {
         final contents = await file.readAsString();
         final oldData = jsonDecode(contents);
         List careers = oldData["data"] ?? [];
+
         if (careers.length < 5) {
           careers.add(career_result);
         } else {
           careers.removeAt(0);
           careers.add(career_result);
         }
-        final newData = {
-          "data": careers,
-        };
-        await file.writeAsString(jsonEncode(newData));
-        state = newData;
+
+        newData = {"data": careers};
       } else {
-        List careers = [career_result];
-        final newData = {
-          "data": careers,
+        newData = {
+          "data": [career_result]
         };
-        await file.writeAsString(jsonEncode(newData));
-        state = newData;
       }
+
+      // **Await the file write operation**
+      await file.writeAsString(jsonEncode(newData));
+
+      // **Confirm that file was written before updating state**
+      final writtenContents = await file.readAsString();
+      print("Stored Data: $writtenContents");
+
+      // **Now update the state after confirming the file is correct**
+      state = jsonDecode(writtenContents);
     } catch (e) {
-      print(e);
+      print("Error storing career result: $e");
     }
   }
 

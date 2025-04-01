@@ -14,6 +14,7 @@ class _LatestResultsState extends ConsumerState<LatestResults> {
   @override
   Widget build(BuildContext context) {
     final careers = ref.watch(historyProvider)["data"];
+    print("careers: $careers");
     return Container(
       width: MediaQuery.of(context).size.width * 0.85,
       child: Column(

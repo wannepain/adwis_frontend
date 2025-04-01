@@ -11,7 +11,6 @@ class CareerCard extends ConsumerStatefulWidget {
   final Function onCareerAccept;
   final Function onCareerDecline;
   final bool? declined;
-  final Function saveCareerResult;
   CareerCard({
     super.key,
     required this.history,
@@ -19,7 +18,6 @@ class CareerCard extends ConsumerStatefulWidget {
     required this.onCareerAccept,
     required this.onCareerDecline,
     this.declined = null,
-    required this.saveCareerResult,
   });
 
   @override
@@ -31,8 +29,33 @@ class _CareerCardState extends ConsumerState<CareerCard> {
   String salary = "";
   String title = "";
   String description = "";
+  Map careerResult = {};
 
   double opacityLevel = 0.0; // Start hidden
+
+  // void setData() async {
+  //   final response = await ChatbotService().getCareer(
+  //     history: widget.history,
+  //   );
+  //   data.add(response);
+  //   final startingSalary = response["Starting_Salary"];
+
+  //   setState(() {
+  //     salary = "$startingSalary";
+  //     title = response["Career_Name"] == null ? "" : response["Career_Name"];
+  //     description =
+  //         response["Description"] == null ? "" : response["Description"];
+  //   });
+
+  //   ref.read(historyProvider.notifier).addToFile(response);
+
+  //   // Delay animation slightly to allow UI build
+  //   Future.delayed(Duration(milliseconds: 200), () {
+  //     setState(() {
+  //       opacityLevel = 1.0;
+  //     });
+  //   });
+  // }
 
   void setData() async {
     final response = await ChatbotService().getCareer(
@@ -43,12 +66,12 @@ class _CareerCardState extends ConsumerState<CareerCard> {
 
     setState(() {
       salary = "$startingSalary";
-      title = response["Career_Name"] == null ? "" : response["Career_Name"];
-      description =
-          response["Description"] == null ? "" : response["Description"];
+      title = response["Career_Name"] ?? "";
+      description = response["Description"] ?? "";
+      careerResult = response;
     });
 
-    ref.read(historyProvider.notifier).addToFile(response);
+    //ref.read(historyProvider.notifier).addToFile(response);
 
     // Delay animation slightly to allow UI build
     Future.delayed(Duration(milliseconds: 200), () {
@@ -68,14 +91,6 @@ class _CareerCardState extends ConsumerState<CareerCard> {
   Widget build(BuildContext context) {
     double c_width = MediaQuery.of(context).size.width * 0.6;
     print("widget.declined ${widget.declined}");
-    if (widget.declined == false) {
-      final Map careerResult = {
-        "Starting_Salary": salary,
-        "Career_Name": title,
-        "Description": description,
-      };
-      widget.saveCareerResult(careerResult);
-    }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -173,7 +188,12 @@ class _CareerCardState extends ConsumerState<CareerCard> {
                       SizedBox(
                         child: CareerButton(
                           type: "yes",
-                          onPressed: widget.onCareerAccept,
+                          onPressed: () {
+                            if (careerResult.isEmpty) {
+                              return;
+                            }
+                            widget.onCareerAccept(careerResult);
+                          },
                         ),
                         width: c_width * 0.59,
                       ),

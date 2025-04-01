@@ -65,11 +65,6 @@ class HomepageUi extends ConsumerWidget {
                       onCareerAccept: onCareerAccept,
                       onCareerDecline: onCareerDecline,
                       declined: history[index]["declined"],
-                      saveCareerResult: (career_result) {
-                        ref.read(historyProvider.notifier).addToFile(
-                              career_result,
-                            );
-                      },
                     );
                   }
                   // if (history[index]["declined"] != null &&
