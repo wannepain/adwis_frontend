@@ -6,8 +6,8 @@ class DopamineService {
   final Random _random = Random(); // Create a random instance
 
   Future<void> showCompliment({required List history}) async {
-    if (_random.nextDouble() < 0.6) {
-      // 60% chance
+    if (_random.nextDouble() < 0.4) {
+      // 40% chance
       final String? compliment =
           await ChatbotService().getCompliment(history: history);
       print("compliment: $compliment");

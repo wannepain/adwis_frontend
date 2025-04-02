@@ -10,6 +10,7 @@ class TextInput extends ConsumerWidget {
   final bool isDisabled;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print("is TextInput disabled: $isDisabled");
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 12),
       child: Container(

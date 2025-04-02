@@ -22,6 +22,7 @@ class Homepage extends ConsumerStatefulWidget {
 
 class _HomepageState extends ConsumerState<Homepage> {
   final ScrollController _scrollController = ScrollController();
+  bool showRestartBtn = false;
 
   @override
   void dispose() {
@@ -29,7 +30,7 @@ class _HomepageState extends ConsumerState<Homepage> {
     super.dispose();
   }
 
-  void _scrollToBottom() {
+  void scrollToBottom() {
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
@@ -49,7 +50,7 @@ class _HomepageState extends ConsumerState<Homepage> {
     DopamineService().showCompliment(history: history);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToBottom();
+      scrollToBottom();
     });
 
     setData();
@@ -63,6 +64,9 @@ class _HomepageState extends ConsumerState<Homepage> {
   void restartConversation() {
     final numOfRestarts = ref.read(restartProvider);
     if (numOfRestarts < 5) {
+      setState(() {
+        showRestartBtn = false;
+      });
       ref.read(historyManagmentProvider.notifier).clean();
       ref.read(restartProvider.notifier).increment();
       setData();
@@ -94,7 +98,7 @@ class _HomepageState extends ConsumerState<Homepage> {
       );
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToBottom();
+      scrollToBottom();
     });
   }
 
@@ -113,7 +117,9 @@ class _HomepageState extends ConsumerState<Homepage> {
     print("career history ${ref.read(historyProvider)["data"]}");
 
     // Now restart conversation
-    restartConversation();
+    setState(() {
+      showRestartBtn = true;
+    });
   }
 
   void onCareerDecline() async {
@@ -170,7 +176,9 @@ class _HomepageState extends ConsumerState<Homepage> {
             show_history: showHistory,
           );
     }
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      scrollToBottom();
+    });
     print("career declined");
   }
 
@@ -200,6 +208,7 @@ class _HomepageState extends ConsumerState<Homepage> {
                 onCareerAccept: onCareerAccept,
                 onCareerDecline: onCareerDecline,
                 returnText: returnText,
+                showRestartBtn: showRestartBtn,
               ),
             ),
             if (numOfRestarts >= 5)

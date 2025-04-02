@@ -33,6 +33,7 @@ class TextFieldWithIcon extends StatelessWidget {
                 ? HexToRgba().convert("33658A", 0.50)
                 : HexToRgba().convert("33658A", 1),
             //controller: _controller,
+            // focusNode: ,
             onChanged: (value) {
               _text = value;
             },

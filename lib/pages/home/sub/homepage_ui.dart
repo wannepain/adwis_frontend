@@ -19,6 +19,7 @@ class HomepageUi extends ConsumerWidget {
   final Function onCareerDecline;
   final Function onCareerAccept;
   final Function returnText;
+  final bool showRestartBtn;
   HomepageUi({
     super.key,
     required this.scrollController,
@@ -28,6 +29,7 @@ class HomepageUi extends ConsumerWidget {
     required this.onCareerDecline,
     required this.onCareerAccept,
     required this.returnText,
+    required this.showRestartBtn,
   });
 
   @override
@@ -106,25 +108,30 @@ class HomepageUi extends ConsumerWidget {
               ),
             ),
             // Restart button OR text input below CareerCard
-            IntrinsicHeight(
-              child: Column(
-                children: [
-                  if (increment == 0)
-                    WalkthroughHome(
-                      text: "Here you can chat with adwis",
-                      orientation: "bottom",
-                      totalIncrements: 2,
+            showRestartBtn
+                ? RestartConvButton(
+                    restart: restartConversation,
+                    numOfRestarts: numOfRestarts,
+                  )
+                : IntrinsicHeight(
+                    child: Column(
+                      children: [
+                        if (increment == 0)
+                          WalkthroughHome(
+                            text: "Here you can chat with adwis",
+                            orientation: "bottom",
+                            totalIncrements: 2,
+                          ),
+                        TextInput(
+                          isDisabled: history.isNotEmpty &&
+                              history.last["show_career"] != null &&
+                              history.last["show_career"] == true,
+                          returnText: returnText,
+                        ),
+                        SizedBox(width: 6.0),
+                      ],
                     ),
-                  TextInput(
-                    isDisabled: history.isNotEmpty &&
-                        history.last["end"] != null &&
-                        history.last["end"] == true,
-                    returnText: returnText,
                   ),
-                  SizedBox(width: 6.0),
-                ],
-              ),
-            ),
             OverlayLogo(),
           ],
         ),
