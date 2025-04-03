@@ -69,15 +69,6 @@ class HomepageUi extends ConsumerWidget {
                       declined: history[index]["declined"],
                     );
                   }
-                  // if (history[index]["declined"] != null &&
-                  //     history[index]["declined"] == true) {
-                  //   // career declined message
-                  //   return ChatBuble(
-                  //     text: "Career declined",
-                  //     isMe: true,
-                  //     isFirst: index == 0,
-                  //   );
-                  // }
                   // Normal chat bubbles
                   var bot = history[index]['bot'] == null
                       ? ""
@@ -127,6 +118,15 @@ class HomepageUi extends ConsumerWidget {
                               history.last["show_career"] != null &&
                               history.last["show_career"] == true,
                           returnText: returnText,
+                          onTap: () {
+                            if (scrollController.hasClients) {
+                              scrollController.animateTo(
+                                scrollController.position.maxScrollExtent,
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.easeOut,
+                              );
+                            }
+                          },
                         ),
                         SizedBox(width: 6.0),
                       ],

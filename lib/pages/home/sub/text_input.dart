@@ -4,10 +4,15 @@ import 'package:adwis_frontend/pages/home/sub/textfield_with_icon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TextInput extends ConsumerWidget {
-  const TextInput(
-      {super.key, this.isDisabled = false, required this.returnText});
+  const TextInput({
+    super.key,
+    this.isDisabled = false,
+    required this.returnText,
+    required this.onTap,
+  });
   final Function returnText;
   final bool isDisabled;
+  final Function onTap;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     print("is TextInput disabled: $isDisabled");
@@ -40,6 +45,7 @@ class TextInput extends ConsumerWidget {
         child: TextFieldWithIcon(
           returnText: returnText,
           isDisabled: isDisabled,
+          onTap: onTap,
         ),
       ),
     );

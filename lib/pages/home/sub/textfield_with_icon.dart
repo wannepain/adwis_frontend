@@ -8,9 +8,11 @@ class TextFieldWithIcon extends StatelessWidget {
     super.key,
     required this.returnText,
     required this.isDisabled,
+    required this.onTap,
   });
 
   String _text = '';
+  Function onTap;
 
   final textField = TextEditingController();
 
@@ -33,7 +35,10 @@ class TextFieldWithIcon extends StatelessWidget {
                 ? HexToRgba().convert("33658A", 0.50)
                 : HexToRgba().convert("33658A", 1),
             //controller: _controller,
-            // focusNode: ,
+            onTap: () {
+              onTap();
+            },
+
             onChanged: (value) {
               _text = value;
             },
