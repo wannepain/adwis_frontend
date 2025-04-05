@@ -6,9 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 void showCustomSnackBar(String message) {
   snackbarKey.currentState?.showSnackBar(
     SnackBar(
-      backgroundColor: HexToRgba().convert("C4D3DE", 1),
-      behavior: SnackBarBehavior.floating,
-      margin: const EdgeInsets.all(12),
+      backgroundColor: HexToRgba().convert("FCFEFF", 1),
+      padding: EdgeInsets.symmetric(
+        vertical: 6,
+        horizontal: 16,
+      ),
+      duration: Duration(seconds: 2),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -17,7 +20,7 @@ void showCustomSnackBar(String message) {
             style: TextStyle(
               color: HexToRgba().convert("080705", 1),
               fontSize: 20,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w400,
               fontFamily: GoogleFonts.inter().fontFamily,
             ),
           ),
