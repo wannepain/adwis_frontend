@@ -64,7 +64,7 @@ class _HomepageState extends ConsumerState<Homepage> {
 
   void restartConversation() {
     final numOfRestarts = ref.read(restartProvider)["restarts"];
-    if (numOfRestarts! < 5) {
+    if (numOfRestarts! < 2) {
       setState(() {
         showRestartBtn = false;
       });
