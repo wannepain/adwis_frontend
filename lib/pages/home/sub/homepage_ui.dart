@@ -43,6 +43,7 @@ class HomepageUi extends ConsumerWidget {
         ),
       );
     }
+
     return Scaffold(
       backgroundColor: Color.fromRGBO(252, 254, 255, 1),
       body: Container(

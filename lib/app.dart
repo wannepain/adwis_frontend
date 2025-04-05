@@ -2,13 +2,15 @@ import 'package:adwis_frontend/pages/speech/main_speech.dart';
 import 'package:adwis_frontend/pages/unlimited/go_unlimited.dart';
 import 'package:adwis_frontend/providers/history_providers.dart';
 import 'package:adwis_frontend/services/payments_service.dart';
-import 'package:adwis_frontend/utils/compliment_snack_bar.dart';
+//import 'package:adwis_frontend/utils/compliment_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/homepage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:adwis_frontend/pages/user/auth_screen.dart';
 import 'package:adwis_frontend/providers/user_provider.dart';
 import 'package:adwis_frontend/pages/user/account_managment.dart';
+
+import 'services/navigation_service.dart';
 
 class App extends ConsumerStatefulWidget {
   final snackBarKey;

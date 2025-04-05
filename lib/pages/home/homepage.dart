@@ -1,8 +1,8 @@
 import 'package:adwis_frontend/pages/home/walktrough_home/walktrough_home.dart';
 import 'package:adwis_frontend/providers/history_managment_provider.dart';
+import 'package:adwis_frontend/providers/user_provider.dart';
 import 'package:adwis_frontend/providers/utils/walktrough_provider.dart';
 import 'package:adwis_frontend/services/dopamine_service.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/sub/homepage_ui.dart';
 import 'package:adwis_frontend/services/chatbot_service.dart';
@@ -46,9 +46,10 @@ class _HomepageState extends ConsumerState<Homepage> {
     ref
         .watch(historyManagmentProvider.notifier)
         .updateHistory(show_history: history);
-
-    DopamineService().showCompliment(history: history);
-
+    bool showingSnackBar = ref.read(restartProvider)["showing_snackbar"];
+    if (!showingSnackBar) {
+      DopamineService().showCompliment(history: history);
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       scrollToBottom();
     });
@@ -62,13 +63,13 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   void restartConversation() {
-    final numOfRestarts = ref.read(restartProvider);
-    if (numOfRestarts < 5) {
+    final numOfRestarts = ref.read(restartProvider)["restarts"];
+    if (numOfRestarts! < 5) {
       setState(() {
         showRestartBtn = false;
       });
       ref.read(historyManagmentProvider.notifier).clean();
-      ref.read(restartProvider.notifier).increment();
+      ref.read(restartProvider.notifier).increment_restarts();
       setData();
     }
   }
@@ -76,10 +77,18 @@ class _HomepageState extends ConsumerState<Homepage> {
   void setData() async {
     final List<dynamic> sendHistory =
         ref.read(historyManagmentProvider)["send_history"];
+    final bool? isUnlimited = ref.read(userProvider)["isUnlimited"];
+    Map result;
+    if (isUnlimited == true) {
+      result = await ChatbotService().chatbotRespond(
+        history: sendHistory,
+      );
+    } else {
+      result = await ChatbotService().chatbotRespondLimited(
+        history: sendHistory,
+      );
+    }
 
-    Map result = await ChatbotService().chatbotRespond(
-      history: sendHistory,
-    );
     ref.read(historyManagmentProvider.notifier).updateHistory(
           show_history: result["history"] ?? [],
         );
@@ -103,7 +112,7 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   void resetFunction() {
-    ref.read(restartProvider.notifier).reset();
+    ref.read(restartProvider.notifier).reset_restarts();
   }
 
   void onCareerAccept(career_result) async {
@@ -180,6 +189,7 @@ class _HomepageState extends ConsumerState<Homepage> {
       scrollToBottom();
     });
     print("career declined");
+    ref.read(restartProvider.notifier).increment_career_declines();
   }
 
   @override
@@ -191,9 +201,10 @@ class _HomepageState extends ConsumerState<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    final numOfRestarts = ref.watch(restartProvider);
+    final numOfRestarts = ref.watch(restartProvider)['restarts'];
     final currentTutorialStep = ref.watch(walkthroughProvider);
     final history = ref.watch(historyManagmentProvider);
+
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(6),
@@ -204,7 +215,7 @@ class _HomepageState extends ConsumerState<Homepage> {
                 scrollController: _scrollController,
                 history: history["show_history"],
                 restartConversation: restartConversation,
-                numOfRestarts: numOfRestarts,
+                numOfRestarts: numOfRestarts!,
                 onCareerAccept: onCareerAccept,
                 onCareerDecline: onCareerDecline,
                 returnText: returnText,

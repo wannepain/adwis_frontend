@@ -1,5 +1,6 @@
 import 'package:adwis_frontend/pages/home/sub/career/career_button.dart';
-import 'package:adwis_frontend/providers/history_providers.dart';
+import 'package:adwis_frontend/providers/restart_provider.dart';
+import 'package:adwis_frontend/utils/go_unlimited_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,32 +31,9 @@ class _CareerCardState extends ConsumerState<CareerCard> {
   String title = "";
   String description = "";
   Map careerResult = {};
+  late SnackBarController controller;
 
   double opacityLevel = 0.0; // Start hidden
-
-  // void setData() async {
-  //   final response = await ChatbotService().getCareer(
-  //     history: widget.history,
-  //   );
-  //   data.add(response);
-  //   final startingSalary = response["Starting_Salary"];
-
-  //   setState(() {
-  //     salary = "$startingSalary";
-  //     title = response["Career_Name"] == null ? "" : response["Career_Name"];
-  //     description =
-  //         response["Description"] == null ? "" : response["Description"];
-  //   });
-
-  //   ref.read(historyProvider.notifier).addToFile(response);
-
-  //   // Delay animation slightly to allow UI build
-  //   Future.delayed(Duration(milliseconds: 200), () {
-  //     setState(() {
-  //       opacityLevel = 1.0;
-  //     });
-  //   });
-  // }
 
   void setData() async {
     final response = await ChatbotService().getCareer(
@@ -85,11 +63,20 @@ class _CareerCardState extends ConsumerState<CareerCard> {
   void initState() {
     super.initState();
     setData();
+    final int careerDeclines = ref.read(restartProvider)["career_declines"]!;
+    Future(() async {
+      if (careerDeclines > 1) {
+        ref.read(restartProvider.notifier).seShowingSnackBar(true);
+        controller = showGoUnlimitedSnackBar("for more career options");
+        ref.read(restartProvider.notifier).seShowingSnackBar(false);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     double c_width = MediaQuery.of(context).size.width * 0.6;
+    int career_declines = ref.watch(restartProvider)["career_declines"]!;
     print("widget.declined ${widget.declined}");
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,21 +179,29 @@ class _CareerCardState extends ConsumerState<CareerCard> {
                             if (careerResult.isEmpty) {
                               return;
                             }
+                            if (career_declines > 1) {
+                              controller.dismiss();
+                              ref
+                                  .read(restartProvider.notifier)
+                                  .seShowingSnackBar(false);
+                            }
                             widget.onCareerAccept(careerResult);
                           },
                         ),
-                        width: c_width * 0.59,
+                        width: career_declines < 2 ? c_width * 0.59 : c_width,
                       ),
-                      SizedBox(
-                        width: c_width * 0.01,
-                      ),
-                      SizedBox(
-                        child: CareerButton(
-                          type: "no",
-                          onPressed: widget.onCareerDecline,
+                      if (career_declines < 2)
+                        SizedBox(
+                          width: c_width * 0.01,
                         ),
-                        width: c_width * 0.40,
-                      ),
+                      if (career_declines < 2)
+                        SizedBox(
+                          child: CareerButton(
+                            type: "no",
+                            onPressed: widget.onCareerDecline,
+                          ),
+                          width: c_width * 0.40,
+                        ),
                     ],
                   )
                 : widget.declined == true
