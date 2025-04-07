@@ -2,6 +2,7 @@ import 'package:adwis_frontend/pages/speech/main_speech.dart';
 import 'package:adwis_frontend/pages/unlimited/go_unlimited.dart';
 import 'package:adwis_frontend/providers/history_providers.dart';
 import 'package:adwis_frontend/services/payments_service.dart';
+import 'package:adwis_frontend/utils/go_unlimited_snack_bar/go_unlimited_snack_bar.dart';
 //import 'package:adwis_frontend/utils/compliment_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/homepage.dart';
@@ -48,6 +49,7 @@ class _AppState extends ConsumerState<App> {
       title: 'Adwis',
       scaffoldMessengerKey: widget.snackBarKey,
       navigatorKey: navigatorKey,
+      navigatorObservers: [SnackBarDismissObserver()],
       home: Homepage(),
       routes: {
         "/homepage": (context) => Homepage(),

@@ -3,6 +3,7 @@ import 'package:adwis_frontend/providers/history_managment_provider.dart';
 import 'package:adwis_frontend/providers/user_provider.dart';
 import 'package:adwis_frontend/providers/utils/walktrough_provider.dart';
 import 'package:adwis_frontend/services/dopamine_service.dart';
+import 'package:adwis_frontend/utils/go_unlimited_snack_bar/snack_bar_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/sub/homepage_ui.dart';
 import 'package:adwis_frontend/services/chatbot_service.dart';
@@ -68,6 +69,11 @@ class _HomepageState extends ConsumerState<Homepage> {
       setState(() {
         showRestartBtn = false;
       });
+      final controler = ref.read(
+          snackBarControllerProvider); // Get the current SnackBarController
+      controler?.dismiss(); //close unlimited snackbar if open
+      ref.read(snackBarControllerProvider.notifier).state =
+          null; //reset the controller
       ref.read(historyManagmentProvider.notifier).clean();
       ref.read(restartProvider.notifier).increment_restarts();
       setData();

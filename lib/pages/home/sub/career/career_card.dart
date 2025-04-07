@@ -1,6 +1,7 @@
 import 'package:adwis_frontend/pages/home/sub/career/career_button.dart';
 import 'package:adwis_frontend/providers/restart_provider.dart';
-import 'package:adwis_frontend/utils/go_unlimited_snack_bar.dart';
+import 'package:adwis_frontend/utils/go_unlimited_snack_bar/go_unlimited_snack_bar.dart';
+import 'package:adwis_frontend/utils/go_unlimited_snack_bar/snack_bar_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -68,6 +69,7 @@ class _CareerCardState extends ConsumerState<CareerCard> {
       if (careerDeclines > 1) {
         ref.read(restartProvider.notifier).seShowingSnackBar(true);
         controller = showGoUnlimitedSnackBar("for more career options");
+        ref.read(snackBarControllerProvider.notifier).state = controller;
         ref.read(restartProvider.notifier).seShowingSnackBar(false);
       }
     });
