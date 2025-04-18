@@ -1,0 +1,23 @@
+flutter_native_splash:
+  # common settings
+  # image: "assets/icons/adwis_logo_white_pad.png"
+  android: true       # generate for Android < 12
+  ios: true
+  web: false
+
+  color: "#080705"
+  image: "assets/icons/adwis_white_big_pad.png"
+  branding: "assets/icons/adwis_text_logo_big.png"
+
+  android_12:
+    image: "assets/icons/adwis_white_big_pad.png"
+    color: "#080705"
+    branding: "assets/icons/adwis_text_logo_big.png"
+
+  # android_gravity: center
+  # ios_content_mode: center
+
+  # # === Android 12+ specific configuration ===
+  # android_12:
+  #   color: "#080705"
+  #   image: "assets/icons/adwis_logo_white_pad.png"

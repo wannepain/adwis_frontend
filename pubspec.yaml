@@ -47,25 +47,26 @@ dependencies:
   in_app_purchase: ^3.2.1
   url_launcher: ^6.3.1
   confetti: ^0.8.0
+  flutter_native_splash: ^2.4.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: "^0.14.3"
-
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: false
-  image_path: "assets/icons/adwis_logo_white_pad.png"
-  adaptive_icon_background: "assets/icons/adwis_background.png"
-  adaptive_icon_foreground: "assets/icons/adwis_logo_white_pad.png"
-  
-  # The "flutter_lints" package below contains a set of recommended lints to
+   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: false
+  image_path: "assets/icons/adwis_logo_white_pad.png"
+  # adaptive_icon_background: "assets/icons/adwis_background.png"
+  adaptive_icon_foreground: "assets/icons/adwis_logo_white_pad.png"
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -93,6 +94,9 @@ flutter:
     - assets/images/Facebook_Logo_Primary.png
     - assets/icons/infinity.svg
     - assets/icons/speech_icon.svg
+    - assets/icons/adwis_text_logo_big.png
+    - assets/icons/adwis_white_big_pad.png
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
