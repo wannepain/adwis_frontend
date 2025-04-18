@@ -53,6 +53,7 @@ class TextFieldWithIcon extends StatelessWidget {
             keyboardType: TextInputType.multiline,
             controller: textField,
             autocorrect: true,
+            autofocus: true,
           ),
         ),
         IconButton(
