@@ -37,6 +37,36 @@ class ChatbotService {
     }
   }
 
+  Future<Map> chatbotRespondStage2({required List history}) async {
+    try {
+      final response =
+          await dio.post("$url/respond/stage/2", data: {"history": history});
+
+      return {
+        "history": response.data['history'],
+        "error": false,
+      };
+    } catch (e) {
+      print('Error: $e');
+      return {"history": null, "error": e};
+    }
+  }
+
+  Future<Map> chatbotRespondStage3({required List history}) async {
+    try {
+      final response =
+          await dio.post("$url/respond/stage/3", data: {"history": history});
+
+      return {
+        "history": response.data['history'],
+        "error": false,
+      };
+    } catch (e) {
+      print('Error: $e');
+      return {"history": null, "error": e};
+    }
+  }
+
   Future<Map> getCareer({required history}) async {
     try {
       final response =

@@ -1,3 +1,4 @@
+import 'package:adwis_frontend/pages/home/sub/Stages/stages.dart';
 import 'package:adwis_frontend/providers/user_provider.dart';
 import 'package:adwis_frontend/utils/functions/hex_to_rgba.dart';
 import 'package:flutter/material.dart';
@@ -34,50 +35,65 @@ class _OverlayLogoState extends ConsumerState<OverlayLogo> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 30),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(252, 254, 255, 1),
-              ),
-              child: isUnlimited
-                  ? Column(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/icons/logo_text.svg",
-                          width: 100,
-                          height: 35,
-                          fit: BoxFit.contain,
-                          colorFilter:
-                              ColorFilter.mode(Colors.black, BlendMode.srcIn),
-                        ),
-                        Text(
-                          "unlimited",
-                          style: TextStyle(
-                            fontFamily: GoogleFonts.inter().fontFamily,
-                            fontSize: 10,
-                            color: HexToRgba().convert("33658A", 1),
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.none,
+              color: HexToRgba().convert("FCFEFF", 1),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    child: isUnlimited
+                        ? Column(
+                            children: [
+                              SvgPicture.asset(
+                                "assets/icons/logo_text.svg",
+                                width: 100,
+                                height: 35,
+                                fit: BoxFit.contain,
+                                colorFilter: ColorFilter.mode(
+                                    Colors.black, BlendMode.srcIn),
+                              ),
+                              Text(
+                                "unlimited",
+                                style: TextStyle(
+                                  fontFamily: GoogleFonts.inter().fontFamily,
+                                  fontSize: 10,
+                                  color: HexToRgba().convert("33658A", 1),
+                                  fontWeight: FontWeight.w500,
+                                  decoration: TextDecoration.none,
+                                ),
+                              ),
+                            ],
+                          )
+                        : SvgPicture.asset(
+                            "assets/icons/logo_text.svg",
+                            width: 109,
+                            height: 45,
+                            fit: BoxFit.contain,
+                            colorFilter:
+                                ColorFilter.mode(Colors.black, BlendMode.srcIn),
                           ),
-                        ),
-                      ],
-                    )
-                  : SvgPicture.asset(
-                      "assets/icons/logo_text.svg",
-                      width: 109,
-                      height: 45,
-                      fit: BoxFit.contain,
-                      colorFilter:
-                          ColorFilter.mode(Colors.black, BlendMode.srcIn),
-                    ),
+                  ),
+                  SizedBox(
+                    height: 6,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Stages(),
+                  ),
+                  SizedBox(
+                    height: 6,
+                  )
+                ],
+              ),
             ),
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color.fromRGBO(252, 254, 255, 1),
-                    Color.fromRGBO(252, 254, 255, 0),
+                    HexToRgba().convert("FCFEFF", 1),
+                    HexToRgba().convert("FCFEFF", 0),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,

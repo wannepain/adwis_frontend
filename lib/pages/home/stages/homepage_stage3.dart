@@ -1,6 +1,5 @@
 import 'package:adwis_frontend/pages/home/walktrough_home/walktrough_home.dart';
 import 'package:adwis_frontend/providers/history_managment_provider.dart';
-import 'package:adwis_frontend/providers/stages_provider.dart';
 import 'package:adwis_frontend/providers/user_provider.dart';
 import 'package:adwis_frontend/providers/utils/walktrough_provider.dart';
 import 'package:adwis_frontend/services/dopamine_service.dart';
@@ -14,16 +13,15 @@ import 'package:adwis_frontend/providers/restart_provider.dart';
 import 'package:adwis_frontend/providers/history_providers.dart';
 import 'package:adwis_frontend/pages/user/user_buton.dart';
 
-class Homepage extends ConsumerStatefulWidget {
+class HomepageStage3 extends ConsumerStatefulWidget {
   bool forceOpenAuth;
-  final int stage;
-  Homepage({super.key, this.forceOpenAuth = false, required this.stage});
+  HomepageStage3({super.key, this.forceOpenAuth = false});
 
   @override
   _HomepageState createState() => _HomepageState();
 }
 
-class _HomepageState extends ConsumerState<Homepage> {
+class _HomepageState extends ConsumerState<HomepageStage3> {
   final ScrollController _scrollController = ScrollController();
   bool showRestartBtn = false;
 
@@ -86,28 +84,11 @@ class _HomepageState extends ConsumerState<Homepage> {
     final List<dynamic> sendHistory =
         ref.read(historyManagmentProvider)["send_history"];
     final bool? isUnlimited = ref.read(userProvider)["isUnlimited"];
-    final int stage = ref.read(stagesProvider)["current_stage"];
-    late Map result;
+    Map result;
     if (isUnlimited == true) {
-      switch (stage) {
-        case 1:
-          result = await ChatbotService().chatbotRespond(
-            //change based on stage
-            history: sendHistory,
-          );
-          break;
-        case 2:
-          result = await ChatbotService().chatbotRespondStage2(
-            history: sendHistory,
-          );
-          break;
-        case 3:
-          result = await ChatbotService().chatbotRespondStage3(
-            history: sendHistory,
-          );
-          break;
-        default:
-      }
+      result = await ChatbotService().chatbotRespond(
+        history: sendHistory,
+      );
     } else {
       result = await ChatbotService().chatbotRespondLimited(
         history: sendHistory,

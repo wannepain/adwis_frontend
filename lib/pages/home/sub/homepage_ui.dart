@@ -1,7 +1,10 @@
+import 'package:adwis_frontend/pages/home/sub/Stages/Stages.dart';
 import 'package:adwis_frontend/pages/home/walktrough_home/walktrough_home.dart';
 import 'package:adwis_frontend/providers/history_providers.dart';
+import 'package:adwis_frontend/providers/user_provider.dart';
 // import 'package:adwis_frontend/pages/speech/utils/open_speech_button.dart';
 import 'package:adwis_frontend/providers/utils/walktrough_provider.dart';
+import 'package:adwis_frontend/utils/functions/hex_to_rgba.dart';
 import 'package:flutter/material.dart';
 import 'package:adwis_frontend/pages/home/sub/chat_buble.dart';
 import 'package:adwis_frontend/utils/loader_center.dart';
@@ -10,6 +13,8 @@ import 'package:adwis_frontend/pages/home/sub/career/restart_conv_button.dart';
 import 'package:adwis_frontend/pages/home/sub/text_input.dart';
 import 'package:adwis_frontend/pages/home/sub/overlay_logo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomepageUi extends ConsumerWidget {
   final ScrollController scrollController;
@@ -35,6 +40,7 @@ class HomepageUi extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final increment = ref.watch(walkthroughProvider);
+    final isUnlimited = ref.watch(userProvider)["isUnlimited"];
     if (history.isEmpty) {
       return Scaffold(
         backgroundColor: Color.fromRGBO(252, 254, 255, 1),
@@ -45,9 +51,80 @@ class HomepageUi extends ConsumerWidget {
     }
 
     return Scaffold(
+      // appBar: PreferredSize(
+      //   preferredSize: Size.fromHeight(100), // Adjust height as needed
+      // child: AppBar(
+      //   backgroundColor: Color.fromRGBO(252, 254, 255, 1),
+      //   elevation: 0,
+      //   flexibleSpace: Column(
+      //     children: [
+      //       SizedBox(
+      //         height: 20,
+      //       ),
+      //       Container(
+      //         child: isUnlimited
+      //             ? Column(
+      //                 children: [
+      //                   SvgPicture.asset(
+      //                     "assets/icons/logo_text.svg",
+      //                     width: 100,
+      //                     height: 35,
+      //                     fit: BoxFit.contain,
+      //                     colorFilter:
+      //                         ColorFilter.mode(Colors.black, BlendMode.srcIn),
+      //                   ),
+      //                   Text(
+      //                     "unlimited",
+      //                     style: TextStyle(
+      //                       fontFamily: GoogleFonts.inter().fontFamily,
+      //                       fontSize: 10,
+      //                       color: HexToRgba().convert("33658A", 1),
+      //                       fontWeight: FontWeight.w500,
+      //                       decoration: TextDecoration.none,
+      //                     ),
+      //                   ),
+      //                 ],
+      //               )
+      //             : SvgPicture.asset(
+      //                 "assets/icons/logo_text.svg",
+      //                 width: 109,
+      //                 height: 45,
+      //                 fit: BoxFit.contain,
+      //                 colorFilter:
+      //                     ColorFilter.mode(Colors.black, BlendMode.srcIn),
+      //               ),
+      //       ),
+      //       SizedBox(
+      //         height: 6,
+      //       ),
+      //       SizedBox(
+      //         width: double.infinity,
+      //         child: Stages(),
+      //       ),
+      //       Container(
+      //         width: double.infinity,
+      //         height: 10,
+      //         decoration: BoxDecoration(
+      //           gradient: LinearGradient(
+      //             colors: [
+      //               Color.fromRGBO(252, 254, 255, 1),
+      //               Color.fromRGBO(252, 254, 255, 0),
+      //             ],
+      //             begin: Alignment.topCenter,
+      //             end: Alignment.bottomCenter,
+      //           ),
+      //         ),
+      //       )
+      //     ],
+      //   ),
+      // ),
+      // ),
       backgroundColor: Color.fromRGBO(252, 254, 255, 1),
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 18),
+        padding: EdgeInsets.only(
+          top: 60,
+          bottom: 12,
+        ),
         child: Column(
           children: [
             Flexible(

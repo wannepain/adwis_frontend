@@ -1,6 +1,9 @@
+import 'package:adwis_frontend/pages/home/stages/homepage_stage2.dart';
+import 'package:adwis_frontend/pages/home/stages/homepage_stage3.dart';
 import 'package:adwis_frontend/pages/speech/main_speech.dart';
 import 'package:adwis_frontend/pages/unlimited/go_unlimited.dart';
 import 'package:adwis_frontend/providers/history_providers.dart';
+import 'package:adwis_frontend/providers/stages_provider.dart';
 import 'package:adwis_frontend/services/payments_service.dart';
 import 'package:adwis_frontend/utils/go_unlimited_snack_bar/go_unlimited_snack_bar.dart';
 //import 'package:adwis_frontend/utils/compliment_snack_bar.dart';
@@ -25,6 +28,7 @@ class _AppState extends ConsumerState<App> {
   void initFunction() async {
     await ref.read(userProvider.notifier).getUserData();
     await ref.read(historyProvider.notifier).clean();
+    await ref.read(stagesProvider.notifier).load();
   }
 
   @override
@@ -45,14 +49,25 @@ class _AppState extends ConsumerState<App> {
     final userData = ref.watch(userProvider);
     final isAuth = userData["uid"] != null;
     final isUnlimited = userData["isUnlimited"];
+    final currentStage = ref.watch(stagesProvider)["current_stage"];
     return MaterialApp(
       title: 'Adwis',
       scaffoldMessengerKey: widget.snackBarKey,
       navigatorKey: navigatorKey,
       navigatorObservers: [SnackBarDismissObserver()],
-      home: Homepage(),
+      home: Homepage(
+        stage: currentStage,
+      ),
       routes: {
-        "/homepage": (context) => Homepage(),
+        "/homepage": (context) => Homepage(
+              stage: 1,
+            ),
+        "/homepage/2": (context) => Homepage(
+              stage: 2,
+            ),
+        "/homepage/3": (context) => Homepage(
+              stage: 3,
+            ),
         "/auth": (context) => isAuth ? AccountManagment() : AuthScreen(),
         "/unlimited": (context) =>
             isUnlimited ? AccountManagment() : GoUnlimited(),
