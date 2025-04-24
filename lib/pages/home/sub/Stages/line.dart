@@ -14,14 +14,14 @@ class Line extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 2,
-      height: 40,
+      width: 40,
+      height: 2,
       decoration: BoxDecoration(
         color: inProgress
             ? null
             : isCompleted
-                ? HexToRgba().convert("EBEAEA", 1)
-                : HexToRgba().convert("8FC6EE", 1),
+                ? HexToRgba().convert("8FC6EE", 1)
+                : HexToRgba().convert("EBEAEA", 1),
         borderRadius: BorderRadius.circular(1),
         gradient: inProgress
             ? LinearGradient(

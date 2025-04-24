@@ -15,8 +15,8 @@ class Stages extends ConsumerStatefulWidget {
 class _StagesState extends ConsumerState<Stages> {
   @override
   Widget build(BuildContext context) {
-    final currentStage = ref.watch(stagesProvider)["current_stage"];
-    final isUnlimited = ref.watch(userProvider)["is_unlimited"];
+    final int currentStage = ref.watch(stagesProvider)["current_stage"];
+    final bool isUnlimited = ref.watch(userProvider)["isUnlimited"];
     return Row(
       children: [
         GestureDetector(

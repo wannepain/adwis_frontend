@@ -1,5 +1,6 @@
 import 'package:adwis_frontend/utils/functions/hex_to_rgba.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Circle extends StatelessWidget {
   final bool isCompleted;
@@ -45,6 +46,9 @@ class Circle extends StatelessWidget {
                 style: TextStyle(
                   color: HexToRgba().convert("080705", 1),
                   fontSize: 16,
+                  decoration: TextDecoration.none,
+                  fontFamily: GoogleFonts.inter().fontFamily,
+                  fontWeight: FontWeight.w500,
                 ),
               )
             : Icon(
