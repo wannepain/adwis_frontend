@@ -18,6 +18,7 @@ class _StagesState extends ConsumerState<Stages> {
     final int currentStage = ref.watch(stagesProvider)["current_stage"];
     final bool isUnlimited = ref.watch(userProvider)["isUnlimited"];
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
           onTap: () {

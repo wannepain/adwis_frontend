@@ -14,8 +14,8 @@ class Line extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 40,
-      height: 2,
+      width: MediaQuery.of(context).size.width * 0.25,
+      height: 3,
       decoration: BoxDecoration(
         color: inProgress
             ? null
