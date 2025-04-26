@@ -1,5 +1,4 @@
-import 'package:adwis_frontend/pages/home/stages/homepage_stage2.dart';
-import 'package:adwis_frontend/pages/home/stages/homepage_stage3.dart';
+import 'package:adwis_frontend/pages/home/sub/Stages/stage_advance_screen.dart';
 import 'package:adwis_frontend/pages/speech/main_speech.dart';
 import 'package:adwis_frontend/pages/unlimited/go_unlimited.dart';
 import 'package:adwis_frontend/providers/history_providers.dart';
@@ -60,14 +59,15 @@ class _AppState extends ConsumerState<App> {
       ),
       routes: {
         "/homepage": (context) => Homepage(
-              stage: 1,
+              stage: currentStage,
             ),
-        "/homepage/2": (context) => Homepage(
-              stage: 2,
-            ),
-        "/homepage/3": (context) => Homepage(
-              stage: 3,
-            ),
+        // "/homepage/2": (context) => Homepage(
+        //       stage: 2,
+        //     ),
+        // "/homepage/3": (context) => Homepage(
+        //       stage: 3,
+        // ),
+        "/congratulations": (context) => StageAdvanceScreen(),
         "/auth": (context) => isAuth ? AccountManagment() : AuthScreen(),
         "/unlimited": (context) =>
             isUnlimited ? AccountManagment() : GoUnlimited(),

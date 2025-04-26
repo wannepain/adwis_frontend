@@ -47,7 +47,7 @@ class RestartConvButton extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min, // Ensures Row wraps its content
               children: [
                 Text(
-                  "Restart Conversation",
+                  "Continue",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: GoogleFonts.inter().fontFamily,
@@ -56,35 +56,35 @@ class RestartConvButton extends ConsumerWidget {
                     color: Color.fromRGBO(8, 7, 5, 1),
                   ),
                 ),
-                SizedBox(width: 8), // Spacing between text and icon
-                SizedBox(
-                  height: 42,
-                  width: 42,
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: Center(
-                          child: Text(
-                            restartsLeft.toString(),
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: GoogleFonts.inter().fontFamily,
-                              color: Color.fromRGBO(8, 7, 5, 1),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned.fill(
-                        child: Icon(
-                          Icons.refresh,
-                          color: Color.fromRGBO(8, 7, 5, 1),
-                          size: 42,
-                        ),
-                      )
-                    ],
-                  ),
-                )
+                // SizedBox(width: 8), // Spacing between text and icon
+                // SizedBox(
+                //   height: 42,
+                //   width: 42,
+                //   child: Stack(
+                //     children: [
+                //       Positioned.fill(
+                //         child: Center(
+                //           child: Text(
+                //             restartsLeft.toString(),
+                //             style: TextStyle(
+                //               fontSize: 16,
+                //               fontFamily: GoogleFonts.inter().fontFamily,
+                //               color: Color.fromRGBO(8, 7, 5, 1),
+                //               fontWeight: FontWeight.bold,
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //       Positioned.fill(
+                //         child: Icon(
+                //           Icons.refresh,
+                //           color: Color.fromRGBO(8, 7, 5, 1),
+                //           size: 42,
+                //         ),
+                //       )
+                //     ],
+                //   ),
+                // )
               ],
             ),
           ),

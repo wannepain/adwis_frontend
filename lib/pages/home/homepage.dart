@@ -66,20 +66,38 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   void restartConversation() {
-    final numOfRestarts = ref.read(restartProvider)["restarts"];
-    if (numOfRestarts! < 2) {
-      setState(() {
-        showRestartBtn = false;
-      });
-      final controler = ref.read(
-          snackBarControllerProvider); // Get the current SnackBarController
-      controler?.dismiss(); //close unlimited snackbar if open
-      ref.read(snackBarControllerProvider.notifier).state =
-          null; //reset the controller
-      ref.read(historyManagmentProvider.notifier).clean();
-      ref.read(restartProvider.notifier).increment_restarts();
-      setData();
-    }
+    // final numOfRestarts = ref.read(restartProvider)["restarts"];
+    // if (numOfRestarts! < 2) {
+    //   setState(() {
+    //     showRestartBtn = false;
+    //   });
+    //   final controler = ref.read(
+    //       snackBarControllerProvider); // Get the current SnackBarController
+    //   controler?.dismiss(); //close unlimited snackbar if open
+    //   ref.read(snackBarControllerProvider.notifier).state =
+    //       null; //reset the controller
+    //   ref.read(historyManagmentProvider.notifier).clean();
+    //   ref.read(restartProvider.notifier).increment_restarts();
+    //   setData();
+    // }
+    // final currentStage = ref.read(stagesProvider)["current_stage"];
+    // final isUnlimited = ref.read(userProvider)["isUnlimited"];
+    setState(() {
+      showRestartBtn = false;
+    });
+    final controler = ref
+        .read(snackBarControllerProvider); // Get the current SnackBarController
+    controler?.dismiss(); //close unlimited snackbar if open
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      "/congratulations",
+      (route) => false,
+    );
+    // ref.read(snackBarControllerProvider.notifier).state =
+    //     null; //reset the controller
+    // ref.read(historyManagmentProvider.notifier).clean();
+    // ref.read(restartProvider.notifier).increment_restarts();
+    // setData();
   }
 
   void setData() async {
