@@ -1,7 +1,6 @@
 import 'package:adwis_frontend/pages/home/walktrough_home/walktrough_home.dart';
-import 'package:adwis_frontend/providers/history_managment_provider.dart';
+import 'package:adwis_frontend/providers/stages_history_provider.dart';
 import 'package:adwis_frontend/providers/stages_provider.dart';
-import 'package:adwis_frontend/providers/user_provider.dart';
 import 'package:adwis_frontend/providers/utils/walktrough_provider.dart';
 import 'package:adwis_frontend/services/dopamine_service.dart';
 import 'package:adwis_frontend/utils/go_unlimited_snack_bar/snack_bar_provider.dart';
@@ -44,11 +43,15 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   void returnText(String text) async {
-    final history = ref.watch(historyManagmentProvider)["show_history"];
+    final int stage = ref.read(stagesProvider)["current_stage"];
+    final history =
+        ref.read(stagesHistoryProvider)["stage_$stage"]["show_history"];
     history[history.length - 1]['client'] = text;
+
     ref
-        .watch(historyManagmentProvider.notifier)
-        .updateHistory(show_history: history);
+        .read(stagesHistoryProvider.notifier)
+        .updateHistory(showHistory: history, stage: "stage_$stage");
+
     bool showingSnackBar = ref.read(restartProvider)["showing_snackbar"];
     if (!showingSnackBar) {
       DopamineService().showCompliment(history: history);
@@ -101,56 +104,37 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   void setData() async {
-    final List<dynamic> sendHistory =
-        ref.read(historyManagmentProvider)["send_history"];
-    final bool? isUnlimited = ref.read(userProvider)["isUnlimited"];
     final int stage = ref.read(stagesProvider)["current_stage"];
-    late Map result;
-    if (true) {
-      switch (stage) {
-        case 1:
-          result = await ChatbotService().chatbotRespond(
-            //change based on stage
-            history: sendHistory,
-          );
-          break;
-        case 2:
-          result = await ChatbotService().chatbotRespondStage2(
-            history: sendHistory,
-          );
-          break;
-        case 3:
-          final List careerData = ref.read(historyProvider)['data'];
-          final career = careerData.last;
-          final careerName = career["Career_Name"];
-          result = await ChatbotService().chatbotRespondStage3(
-            blankHistory: [],
-            userCareerPrecise: careerName,
-          );
-          break;
-        default:
-      }
-    } else {
-      result = await ChatbotService().chatbotRespondLimited(
-        history: sendHistory,
-      );
-    }
+    final List<dynamic> sendHistory =
+        ref.read(stagesHistoryProvider)["stage_$stage"]["send_history"];
+    final result = await ChatbotService().chatbotRespond(
+      history: sendHistory,
+      stage: "stage_$stage",
+    );
+    print("result: $result");
 
-    ref.read(historyManagmentProvider.notifier).updateHistory(
-          show_history: result["history"] ?? [],
+    ref.read(stagesHistoryProvider.notifier).updateHistory(
+          showHistory: result["history"],
+          stage: "stage_$stage",
         );
-    final history = ref.read(historyManagmentProvider)["show_history"];
+
+    final history =
+        ref.read(stagesHistoryProvider)["stage_$stage"]["show_history"];
+    print("history: $history");
+
     final String? lastBotMessage =
         history.isNotEmpty ? history.last['bot']["Question_Text"] : null;
+
     if (history.length > 2 &&
         lastBotMessage != null &&
         lastBotMessage
             .contains("I have enough information to suggest a career")) {
-      ref.read(historyManagmentProvider.notifier).addToHistory(
+      ref.read(stagesHistoryProvider.notifier).addToHistory(
         content: {
           "show_career": true,
           "decline": null,
         },
+        stage: "stage_$stage",
       );
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -163,14 +147,10 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   void onCareerAccept(careerResult) async {
-    print("career accepted");
-    print("career_result $careerResult");
-
     await ref.read(historyProvider.notifier).addToFile(careerResult);
 
     // Read back the file to ensure it's properly stored
     await ref.read(historyProvider.notifier).readHistory();
-    print("career history ${ref.read(historyProvider)["data"]}");
 
     // Now restart conversation
     setState(() {
@@ -179,9 +159,11 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   void onCareerDecline() async {
+    final int stage = ref.read(stagesProvider)["current_stage"];
     // Step 1: Read the current history
-    final List<dynamic> sendHistory =
-        List.from(ref.read(historyManagmentProvider)['send_history']);
+    final List<dynamic> sendHistory = List.from(
+      ref.read(stagesHistoryProvider)["stage_$stage"]['send_history'],
+    );
 
     // Step 2: Add the "decline" message
     sendHistory.add({
@@ -193,7 +175,11 @@ class _HomepageState extends ConsumerState<Homepage> {
     });
 
     // Step 3: Get chatbot's response
-    Map result = await ChatbotService().chatbotRespond(history: sendHistory);
+    Map result = await ChatbotService().chatbotRespond(
+      history: sendHistory,
+      stage: "stage_$stage",
+    );
+
     final List<dynamic> resultHistory = result["history"] ?? [];
 
     if (resultHistory.isNotEmpty) {
@@ -205,17 +191,17 @@ class _HomepageState extends ConsumerState<Homepage> {
               "I decline this career suggestion, please continue the conversation");
 
       // Step 5: Update `sendHistory`
-      final result = ref
-          .read(historyManagmentProvider.notifier)
-          .updateSendHistory(send_history: resultHistory);
-      final showHistory = result["show_history"];
+      ref
+          .read(stagesHistoryProvider.notifier)
+          .updateSendHistory(sendHistory: resultHistory, stage: "stage_$stage");
+      final showHistory =
+          ref.read(stagesHistoryProvider)["stage_$stage"]["show_history"];
 
       // Step 6: Find the latest career suggestion and mark it as declined
       final showCareerIndex = showHistory.indexWhere(
         (element) =>
             element["show_career"] == true && element["declined"] == null,
       );
-      print("showCareerIndex $showCareerIndex");
 
       if (showCareerIndex != -1) {
         showHistory[showCareerIndex]["declined"] = true;
@@ -228,14 +214,15 @@ class _HomepageState extends ConsumerState<Homepage> {
       }
 
       // Step 8: Update the provider with the final `showHistory`
-      ref.read(historyManagmentProvider.notifier).updateHistory(
-            show_history: showHistory,
+      ref.read(stagesHistoryProvider.notifier).updateHistory(
+            showHistory: showHistory,
+            stage: "stage_$stage",
           );
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       scrollToBottom();
     });
-    print("career declined");
+
     ref.read(restartProvider.notifier).increment_career_declines();
   }
 
@@ -250,7 +237,6 @@ class _HomepageState extends ConsumerState<Homepage> {
   Widget build(BuildContext context) {
     final numOfRestarts = ref.watch(restartProvider)['restarts'];
     final currentTutorialStep = ref.watch(walkthroughProvider);
-    final history = ref.watch(historyManagmentProvider);
 
     return Scaffold(
       body: Container(
@@ -260,7 +246,7 @@ class _HomepageState extends ConsumerState<Homepage> {
             Positioned.fill(
               child: HomepageUi(
                 scrollController: _scrollController,
-                history: history["show_history"],
+                // history: history["stage_$currentStage"]["show_history"],
                 restartConversation: restartConversation,
                 numOfRestarts: numOfRestarts!,
                 onCareerAccept: onCareerAccept,
