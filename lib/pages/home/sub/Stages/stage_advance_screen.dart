@@ -24,8 +24,9 @@ class _StageAdvanceScreenState extends ConsumerState<StageAdvanceScreen>
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
-  void onTap() async {
-    if (ref.read(userProvider)["isUnlimited"]) {
+  void onTap(isUnlimited) async {
+    print("isunlimited :$isUnlimited");
+    if (true) {
       await ref.read(stagesProvider.notifier).set();
       Navigator.pushNamed(
         context,
@@ -145,7 +146,10 @@ class _StageAdvanceScreenState extends ConsumerState<StageAdvanceScreen>
                 ),
                 const SizedBox(height: 20),
                 GestureDetector(
-                  onTap: onTap,
+                  onTap: () {
+                    final isUnlimited = ref.watch(userProvider)["isUnlimited"];
+                    onTap(isUnlimited);
+                  },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     decoration: BoxDecoration(

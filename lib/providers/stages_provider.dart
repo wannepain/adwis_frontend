@@ -13,19 +13,19 @@ class StagesNotifier extends StateNotifier<Map<String, dynamic>> {
 
   Future<void> load() async {
     //loads stored values from file
-    try {
-      final file = await _localFile;
-      if (await file.exists()) {
-        final contents = await file.readAsString();
-        final data = jsonDecode(contents);
-        state = data ?? {"current_stage": 1};
-      } else {
-        state = {"current_stage": 1};
-      }
-    } catch (e) {
-      print(e);
-      state = {"current_stage": 1};
-    }
+    // try {
+    //   final file = await _localFile;
+    //   if (await file.exists()) {
+    //     final contents = await file.readAsString();
+    //     final data = jsonDecode(contents);
+    //     state = data ?? {"current_stage": 1};
+    //   } else {
+    //     state = {"current_stage": 1};
+    //   }
+    // } catch (e) {
+    //   print(e);
+    //   state = {"current_stage": 1};
+    // }
   }
 
   Future<void> set() async {
@@ -33,11 +33,11 @@ class StagesNotifier extends StateNotifier<Map<String, dynamic>> {
     int currentStage = state["current_stage"] ?? 1;
     int? storedStage;
     try {
-      if (await file.exists()) {
-        final contents = await file.readAsString();
-        final data = jsonDecode(contents);
-        storedStage = data["current_stage"];
-      }
+      // if (await file.exists()) {
+      //   final contents = await file.readAsString();
+      //   final data = jsonDecode(contents);
+      //   storedStage = data["current_stage"];
+      // }
       if (storedStage != null && storedStage >= currentStage) {
         currentStage = storedStage;
       }
@@ -45,17 +45,19 @@ class StagesNotifier extends StateNotifier<Map<String, dynamic>> {
         "current_stage": currentStage + 1,
       };
 
+      state = data;
+
       // **Await the file write operation**
-      await file.writeAsString(jsonEncode(data));
+      // await file.writeAsString(jsonEncode(data));
 
-      // **Confirm that file was written before updating state**
-      final writtenContents = await file.readAsString();
-      print("Stored Data: $writtenContents");
+      // // **Confirm that file was written before updating state**
+      // final writtenContents = await file.readAsString();
+      // print("Stored Data: $writtenContents");
 
-      // **Now update the state after confirming the file is correct**
-      state = jsonDecode(writtenContents);
+      // // **Now update the state after confirming the file is correct**
+      // state = jsonDecode(writtenContents);
     } catch (e) {
-      print("Error storing career result: $e");
+      // print("Error storing career result: $e");
     }
   }
 

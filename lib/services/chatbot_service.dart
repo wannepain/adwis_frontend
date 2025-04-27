@@ -1,13 +1,14 @@
 import "package:dio/dio.dart";
 
 class ChatbotService {
-  final url = "https://adwisbackend-563539782861.us-central1.run.app";
-  // final url = "https://ce94-82-117-156-218.ngrok-free.app";
+  // final url = "https://adwisbackend-563539782861.us-central1.run.app";
+  final url = "https://c189-45-84-122-40.ngrok-free.app";
   final dio = Dio();
 
   ChatbotService();
 
   Future<Map> chatbotRespond({required List history}) async {
+    print("using chatbot unlimited");
     try {
       final response =
           await dio.post("$url/respond/unlimited", data: {"history": history});
@@ -23,6 +24,7 @@ class ChatbotService {
   }
 
   Future<Map> chatbotRespondLimited({required List history}) async {
+    print("using chatbot limited");
     try {
       final response =
           await dio.post("$url/respond/limited", data: {"history": history});
@@ -38,6 +40,7 @@ class ChatbotService {
   }
 
   Future<Map> chatbotRespondStage2({required List history}) async {
+    print("using chatbot stage 2");
     try {
       final response =
           await dio.post("$url/respond/stage/2", data: {"history": history});
@@ -52,10 +55,12 @@ class ChatbotService {
     }
   }
 
-  Future<Map> chatbotRespondStage3({required List history}) async {
+  Future<Map> chatbotRespondStage3(
+      {required List blankHistory, required String userCareerPrecise}) async {
+    print("using chatbot stage 3");
     try {
-      final response =
-          await dio.post("$url/respond/stage/3", data: {"history": history});
+      final response = await dio.post("$url/respond/stage/3",
+          data: {"history": blankHistory, "mentee_purpose": userCareerPrecise});
 
       return {
         "history": response.data['history'],

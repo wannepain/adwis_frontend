@@ -18,7 +18,7 @@ class _GoUnlimitedState extends ConsumerState<GoUnlimited> {
     if (_paymentsService.products.isNotEmpty) {
       await _paymentsService.buy(_paymentsService.products[0]);
       await ref.read(userProvider.notifier).getUserDataNoUpdate();
-      Navigator.of(context).pushReplacementNamed("/homepage");
+      Navigator.pop(context);
     }
   }
 

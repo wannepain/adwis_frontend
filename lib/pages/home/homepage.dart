@@ -106,7 +106,7 @@ class _HomepageState extends ConsumerState<Homepage> {
     final bool? isUnlimited = ref.read(userProvider)["isUnlimited"];
     final int stage = ref.read(stagesProvider)["current_stage"];
     late Map result;
-    if (isUnlimited == true) {
+    if (true) {
       switch (stage) {
         case 1:
           result = await ChatbotService().chatbotRespond(
@@ -120,8 +120,12 @@ class _HomepageState extends ConsumerState<Homepage> {
           );
           break;
         case 3:
+          final List careerData = ref.read(historyProvider)['data'];
+          final career = careerData.last;
+          final careerName = career["Career_Name"];
           result = await ChatbotService().chatbotRespondStage3(
-            history: sendHistory,
+            blankHistory: [],
+            userCareerPrecise: careerName,
           );
           break;
         default:
@@ -158,11 +162,11 @@ class _HomepageState extends ConsumerState<Homepage> {
     ref.read(restartProvider.notifier).reset_restarts();
   }
 
-  void onCareerAccept(career_result) async {
+  void onCareerAccept(careerResult) async {
     print("career accepted");
-    print("career_result $career_result");
+    print("career_result $careerResult");
 
-    await ref.read(historyProvider.notifier).addToFile(career_result);
+    await ref.read(historyProvider.notifier).addToFile(careerResult);
 
     // Read back the file to ensure it's properly stored
     await ref.read(historyProvider.notifier).readHistory();

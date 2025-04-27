@@ -25,7 +25,7 @@ class _StagesState extends ConsumerState<Stages> {
             // if (currentStage > 1) {
             //   ref.read(stagesProvider.notifier).set();
             // }
-            Navigator.pushNamed(context, "/congratulations");
+            // Navigator.pushNamed(context, "/congratulations");
           },
           child: Circle(
             isCompleted: currentStage > 1,

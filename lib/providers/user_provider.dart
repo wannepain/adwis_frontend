@@ -10,7 +10,7 @@ class UserNotifier extends StateNotifier<Map> {
             "email": null,
             "displayName": null,
             "photoURL": null,
-            "isUnlimited": false,
+            "isUnlimited": true,
             "subscriptionData": null,
             "purhcaseToken": null,
           },
@@ -64,7 +64,7 @@ class UserNotifier extends StateNotifier<Map> {
       "email": null,
       "displayName": null,
       "photoURL": null,
-      "isUnlimited": false,
+      "isUnlimited": true,
       "subscriptionData": null,
       "purhcaseToken": null,
     };
