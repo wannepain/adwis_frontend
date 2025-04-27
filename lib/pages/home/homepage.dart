@@ -105,16 +105,25 @@ class _HomepageState extends ConsumerState<Homepage> {
 
   void setData() async {
     final int stage = ref.read(stagesProvider)["current_stage"];
-    final List<dynamic> sendHistory =
-        ref.read(stagesHistoryProvider)["stage_$stage"]["send_history"];
+    final stagesHistory = ref.read(stagesHistoryProvider);
+
+    List<dynamic> sendHistory = stagesHistory["stage_$stage"]["send_history"];
+
+    final prevHistory = stagesHistory["stage_1"]["send_history"];
+
     final result = await ChatbotService().chatbotRespond(
       history: sendHistory,
       stage: "stage_$stage",
+      previousHistory: stage == 2 ? prevHistory : null,
     );
-    print("result: $result");
+    // here we must get rid of the stage 1 conversation, to not show it to the user
+    List resultHistory = List.from(result["history"]);
+    // if (stage == 2) {
+    //   resultHistory.removeRange(0, prevHistory.length - 1);
+    // }
 
     ref.read(stagesHistoryProvider.notifier).updateHistory(
-          showHistory: result["history"],
+          showHistory: resultHistory,
           stage: "stage_$stage",
         );
 
@@ -125,10 +134,10 @@ class _HomepageState extends ConsumerState<Homepage> {
     final String? lastBotMessage =
         history.isNotEmpty ? history.last['bot']["Question_Text"] : null;
 
-    if (history.length > 2 &&
-        lastBotMessage != null &&
-        lastBotMessage
-            .contains("I have enough information to suggest a career")) {
+    if (lastBotMessage != null &&
+        lastBotMessage.contains(
+          "I have enough information to suggest a career",
+        )) {
       ref.read(stagesHistoryProvider.notifier).addToHistory(
         content: {
           "show_career": true,

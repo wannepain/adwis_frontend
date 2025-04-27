@@ -68,7 +68,7 @@ class StageHistoryNotifier extends StateNotifier<Map<String, dynamic>> {
   }
 
   void addToHistory({required content, required String stage}) {
-    final List<dynamic> showHistory = state["state_$stage"]["show_history"];
+    final List<dynamic> showHistory = state[stage]["show_history"];
     showHistory.add(content);
     updateHistory(showHistory: showHistory, stage: stage);
   }

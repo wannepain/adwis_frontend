@@ -10,7 +10,8 @@ class ChatbotService {
   Future<Map> chatbotRespond(
       {required List history,
       required String stage,
-      String? userCareerPrecise}) async {
+      String? userCareerPrecise,
+      List? previousHistory}) async {
     try {
       Response response;
       switch (stage) {
@@ -19,8 +20,10 @@ class ChatbotService {
               .post("$url/respond/unlimited", data: {"history": history});
           break;
         case "stage_2":
-          response = await dio
-              .post("$url/respond/stage/2", data: {"history": history});
+          response = await dio.post("$url/respond/stage/2", data: {
+            "history": history,
+            "previous_conversation": previousHistory
+          });
           break;
         case "stage_3":
           response = await dio.post("$url/respond/stage/3",
