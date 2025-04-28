@@ -106,6 +106,7 @@ class _HomepageState extends ConsumerState<Homepage> {
   void setData() async {
     final int stage = ref.read(stagesProvider)["current_stage"];
     final stagesHistory = ref.read(stagesHistoryProvider);
+    final List userCareers = ref.read(historyProvider)["data"];
 
     List<dynamic> sendHistory = stagesHistory["stage_$stage"]["send_history"];
 
@@ -115,6 +116,7 @@ class _HomepageState extends ConsumerState<Homepage> {
       history: sendHistory,
       stage: "stage_$stage",
       previousHistory: stage == 2 ? prevHistory : null,
+      userCareerPrecise: stage == 3 ? userCareers.last["Career_Name"] : null,
     );
     // here we must get rid of the stage 1 conversation, to not show it to the user
     List resultHistory = List.from(result["history"]);
@@ -168,6 +170,7 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   void onCareerDecline() async {
+    print("Decline career suggestion");
     final int stage = ref.read(stagesProvider)["current_stage"];
     // Step 1: Read the current history
     final List<dynamic> sendHistory = List.from(

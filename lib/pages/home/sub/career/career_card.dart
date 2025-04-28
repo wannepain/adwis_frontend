@@ -19,7 +19,7 @@ class CareerCard extends ConsumerStatefulWidget {
     this.size = 200,
     required this.onCareerAccept,
     required this.onCareerDecline,
-    this.declined = null,
+    this.declined,
   });
 
   @override
@@ -175,6 +175,8 @@ class _CareerCardState extends ConsumerState<CareerCard> {
                 ? Row(
                     children: [
                       SizedBox(
+                        // width: career_declines < 2 ? c_width * 0.59 : c_width,
+                        width: c_width * 0.59,
                         child: CareerButton(
                           type: "yes",
                           onPressed: () {
@@ -190,44 +192,41 @@ class _CareerCardState extends ConsumerState<CareerCard> {
                             widget.onCareerAccept(careerResult);
                           },
                         ),
-                        width: career_declines < 2 ? c_width * 0.59 : c_width,
                       ),
-                      if (career_declines < 2)
-                        SizedBox(
-                          width: c_width * 0.01,
+                      SizedBox(
+                        width: c_width * 0.01,
+                      ),
+                      SizedBox(
+                        width: c_width * 0.40,
+                        child: CareerButton(
+                          type: "no",
+                          onPressed: widget.onCareerDecline,
                         ),
-                      if (career_declines < 2)
-                        SizedBox(
-                          child: CareerButton(
-                            type: "no",
-                            onPressed: widget.onCareerDecline,
-                          ),
-                          width: c_width * 0.40,
-                        ),
+                      ),
                     ],
                   )
                 : widget.declined == true
                     ? Row(
                         children: [
                           SizedBox(
+                            width: c_width,
                             child: CareerButton(
                               type: "no",
                               onPressed: () {},
                               isDisabled: true,
                             ),
-                            width: c_width,
                           ),
                         ],
                       )
                     : Row(
                         children: [
                           SizedBox(
+                            width: c_width,
                             child: CareerButton(
                               type: "yes",
                               onPressed: () {},
                               isDisabled: true,
                             ),
-                            width: c_width,
                           ),
                         ],
                       ),
