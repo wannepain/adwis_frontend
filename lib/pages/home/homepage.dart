@@ -170,7 +170,6 @@ class _HomepageState extends ConsumerState<Homepage> {
   }
 
   void onCareerDecline() async {
-    print("Decline career suggestion");
     final int stage = ref.read(stagesProvider)["current_stage"];
     // Step 1: Read the current history
     final List<dynamic> sendHistory = List.from(
@@ -192,29 +191,39 @@ class _HomepageState extends ConsumerState<Homepage> {
       stage: "stage_$stage",
     );
 
-    final List<dynamic> resultHistory = result["history"] ?? [];
+    // final List<dynamic> resultHistory = result["history"] ?? [];
+    final dynamic rawResultHistory = result["history"];
+    if (rawResultHistory == null || rawResultHistory is! List) {
+      print("Error: resultHistory is not a valid list.");
+      return;
+    }
+
+    final List<dynamic> resultHistory = List.from(rawResultHistory);
+    print("resultHistory: $resultHistory");
 
     if (resultHistory.isNotEmpty) {
+      print('inside resultHistory is not empty');
       // Step 4: Remove unwanted messages
       resultHistory.removeWhere((record) =>
           record["bot"]["Question_Text"]
               .contains("I have enough information to suggest a career") ||
           record["bot"]["Question_Text"] ==
               "I decline this career suggestion, please continue the conversation");
-
+      print("resultHistory after removing: $resultHistory");
       // Step 5: Update `sendHistory`
       ref
           .read(stagesHistoryProvider.notifier)
           .updateSendHistory(sendHistory: resultHistory, stage: "stage_$stage");
       final showHistory =
           ref.read(stagesHistoryProvider)["stage_$stage"]["show_history"];
+      print("showHistory: $showHistory");
 
       // Step 6: Find the latest career suggestion and mark it as declined
       final showCareerIndex = showHistory.indexWhere(
         (element) =>
             element["show_career"] == true && element["declined"] == null,
       );
-
+      print("showCareerIndex: $showCareerIndex");
       if (showCareerIndex != -1) {
         showHistory[showCareerIndex]["declined"] = true;
       }
@@ -224,7 +233,7 @@ class _HomepageState extends ConsumerState<Homepage> {
         final lastMessage = resultHistory.removeLast();
         showHistory.add(lastMessage);
       }
-
+      print("showHistory after appending: $showHistory");
       // Step 8: Update the provider with the final `showHistory`
       ref.read(stagesHistoryProvider.notifier).updateHistory(
             showHistory: showHistory,

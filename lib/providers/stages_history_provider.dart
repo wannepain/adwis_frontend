@@ -41,11 +41,15 @@ class StageHistoryNotifier extends StateNotifier<Map<String, dynamic>> {
   }
 
   void updateSendHistory({required List sendHistory, required String stage}) {
+    if (sendHistory.isEmpty) {
+      print("Warning: sendHistory is empty!");
+    }
+
     final newHistory = List.from(sendHistory); // Create a copy
 
     // Step 1: Remove all career suggestion cards & store their indexes
     final showHistory =
-        List.from(state["show_history"]); // Copy existing history
+        List.from(state[stage]["show_history"]); // Copy existing history
     List<int> whereToShowCareer = [];
 
     int indexOfCareer =

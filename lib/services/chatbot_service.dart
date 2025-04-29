@@ -2,7 +2,7 @@ import "package:dio/dio.dart";
 
 class ChatbotService {
   // final url = "https://adwisbackend-563539782861.us-central1.run.app";
-  final url = "https://e423-45-84-122-40.ngrok-free.app";
+  final url = "https://b641-45-84-122-40.ngrok-free.app";
   final dio = Dio();
 
   ChatbotService();
@@ -27,7 +27,7 @@ class ChatbotService {
           break;
         case "stage_3":
           response = await dio.post("$url/respond/stage/3",
-              data: {"history": [], "mentee_purpose": userCareerPrecise});
+              data: {"history": history, "mentee_purpose": userCareerPrecise});
           break;
         default:
           response = await dio
