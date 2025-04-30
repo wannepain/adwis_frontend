@@ -1,4 +1,6 @@
+import 'package:adwis_frontend/utils/functions/hex_to_rgba.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class ChatBuble extends StatefulWidget {
   const ChatBuble(
@@ -72,12 +74,30 @@ class _ChatBubleState extends State<ChatBuble> {
                 ],
               ),
               child: IntrinsicWidth(
-                child: Text(
-                  widget.text,
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.start,
+                  // child: Text(
+                  //   widget.text,
+                  //   style: TextStyle(fontSize: 16),
+                  //   textAlign: TextAlign.start,
+                  // ),
+                  child: MarkdownBody(
+                data: widget.text,
+                styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(
+                    fontSize: 16,
+                    color: HexToRgba().convert("080705", 1),
+                  ),
+                  a: TextStyle(
+                    color: HexToRgba().convert("080705", 0.7),
+                    decoration: TextDecoration.underline,
+                  ),
+                  blockquote: TextStyle(color: Colors.grey[600]),
+                  code: TextStyle(color: Colors.black, fontSize: 16),
+                  strong: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
                 ),
-              ),
+              )),
             ),
           ),
         ),
