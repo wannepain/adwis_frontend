@@ -5,13 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CareerCard extends StatelessWidget {
   final career_data;
-  CareerCard({super.key, required this.career_data});
+  const CareerCard({super.key, required this.career_data});
 
   String truncateText(String text, int maxLength) {
     if (text.length <= maxLength) {
       return text;
     }
-    return text.substring(0, maxLength) + '...';
+    return '${text.substring(0, maxLength)}...';
   }
 
   @override
@@ -25,7 +25,7 @@ class CareerCard extends StatelessWidget {
         );
       },
       child: Container(
-        height: MediaQuery.of(context).size.width * 0.6,
+        height: MediaQuery.of(context).size.width * 0.5,
         padding: EdgeInsets.symmetric(
           horizontal: 12,
           vertical: 12,
@@ -35,7 +35,7 @@ class CareerCard extends StatelessWidget {
           top: 6,
           bottom: 6,
         ),
-        width: (MediaQuery.of(context).size.width * 0.6) * 0.9,
+        width: (MediaQuery.of(context).size.width * 0.5) * 0.9,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/degree_2.jpg"),
@@ -82,7 +82,7 @@ class CareerCard extends StatelessWidget {
                 /// Removed `IntrinsicHeight` to prevent constraints issues
                 SizedBox(
                   width:
-                      ((MediaQuery.of(context).size.width * 0.6) * 0.9) * 0.5,
+                      ((MediaQuery.of(context).size.width * 0.5) * 0.9) * 0.5,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize

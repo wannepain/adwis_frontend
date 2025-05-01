@@ -9,16 +9,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GoUnlimited extends ConsumerStatefulWidget {
+  String? returnTo;
+  GoUnlimited({
+    super.key,
+    this.returnTo = "/homepage",
+  });
+
   @override
   ConsumerState<GoUnlimited> createState() => _GoUnlimitedState();
 }
 
 class _GoUnlimitedState extends ConsumerState<GoUnlimited> {
   void onTap() async {
-    if (_paymentsService.products.isNotEmpty) {
-      await _paymentsService.buy(_paymentsService.products[0]);
-      await ref.read(userProvider.notifier).getUserDataNoUpdate();
-      Navigator.pop(context);
+    final userData = ref.read(userProvider);
+    if (userData["uid"] == null) {
+      Navigator.pushNamed(
+        context,
+        "/auth",
+      );
+    } else {
+      if (_paymentsService.products.isNotEmpty) {
+        await _paymentsService.buy(_paymentsService.products[0]);
+        await ref.read(userProvider.notifier).getUserDataNoUpdate();
+        //should manually set unlimited to true
+        ref.read(userProvider.notifier).setUnlimited(
+            unlimited:
+                true); //manually set unlimited to true (only for current session)
+        Navigator.pop(context);
+      }
     }
   }
 

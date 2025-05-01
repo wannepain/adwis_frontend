@@ -8,6 +8,7 @@ import 'package:adwis_frontend/utils/functions/hex_to_rgba.dart';
 import 'package:adwis_frontend/providers/user_provider.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
+  const AuthScreen({super.key});
   @override
   ConsumerState<AuthScreen> createState() => _AuthScreenState();
 }
@@ -51,6 +52,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  SizedBox(
+                    height: 24,
+                  ),
                   Stack(
                     children: [
                       Opacity(
@@ -120,7 +124,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             ),
           ),
           Positioned(
-              top: 80,
+              top: 120,
               left: 0,
               right: 0,
               child: Row(

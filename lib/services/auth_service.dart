@@ -13,6 +13,9 @@ class AuthService {
       idToken: googleAuth.idToken,
     );
     final user = await FirebaseService().signInWithCredential(credential);
+
+    await FirebaseService().initNotifications();
+
     print(user);
     return {
       "uid": user!.uid,

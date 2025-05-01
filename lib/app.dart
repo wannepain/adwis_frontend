@@ -49,30 +49,70 @@ class _AppState extends ConsumerState<App> {
     final isAuth = userData["uid"] != null;
     final isUnlimited = userData["isUnlimited"];
     final currentStage = ref.watch(stagesProvider)["current_stage"];
+    // return MaterialApp(
+    //   title: 'Adwis',
+    //   scaffoldMessengerKey: widget.snackBarKey,
+    //   navigatorKey: navigatorKey,
+    //   navigatorObservers: [SnackBarDismissObserver()],
+    //   home: Homepage(
+    //     stage: currentStage,
+    //   ),
+    //   routes: {
+    //     "/homepage": (context) => Homepage(
+    //           stage: currentStage,
+    //         ),
+    //     // "/homepage/2": (context) => Homepage(
+    //     //       stage: 2,
+    //     //     ),
+    //     // "/homepage/3": (context) => Homepage(
+    //     //       stage: 3,
+    //     // ),
+    //     "/congratulations": (context) => StageAdvanceScreen(),
+    //     "/auth": (context) => isAuth ? AccountManagment() : AuthScreen(),
+    //     "/unlimited": (context) =>
+    //         isUnlimited ? AccountManagment() : GoUnlimited(),
+    //     "/speech": (context) =>
+    //         MainSpeech(), //only for unlimited users, add a check here
+    //   },
+    // );
     return MaterialApp(
-      title: 'Adwis',
-      scaffoldMessengerKey: widget.snackBarKey,
-      navigatorKey: navigatorKey,
-      navigatorObservers: [SnackBarDismissObserver()],
-      home: Homepage(
-        stage: currentStage,
-      ),
-      routes: {
-        "/homepage": (context) => Homepage(
-              stage: currentStage,
-            ),
-        // "/homepage/2": (context) => Homepage(
-        //       stage: 2,
-        //     ),
-        // "/homepage/3": (context) => Homepage(
-        //       stage: 3,
-        // ),
-        "/congratulations": (context) => StageAdvanceScreen(),
-        "/auth": (context) => isAuth ? AccountManagment() : AuthScreen(),
-        "/unlimited": (context) =>
-            isUnlimited ? AccountManagment() : GoUnlimited(),
-        "/speech": (context) =>
-            MainSpeech(), //only for unlimited users, add a check here
+      initialRoute: '/homepage',
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/homepage':
+            final int? stage = settings.arguments as int?;
+            return MaterialPageRoute(
+              builder: (context) => Homepage(stage: stage),
+            );
+
+          case '/congratulations':
+            return MaterialPageRoute(
+              builder: (context) => StageAdvanceScreen(),
+            );
+
+          case '/auth':
+            return MaterialPageRoute(
+              builder: (context) => isAuth ? AccountManagment() : AuthScreen(),
+            );
+
+          case '/unlimited':
+            final String? returnTo = settings.arguments as String?;
+            return MaterialPageRoute(
+              builder: (context) => isUnlimited
+                  ? AccountManagment()
+                  : GoUnlimited(
+                      returnTo: returnTo,
+                    ),
+            );
+
+          case '/speech':
+            return MaterialPageRoute(
+              builder: (context) => MainSpeech(),
+            );
+
+          default:
+            return null;
+        }
       },
     );
   }

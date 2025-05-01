@@ -34,16 +34,7 @@ class _LatestResultsState extends ConsumerState<LatestResults> {
           /// Wrapping ListView in a SizedBox to prevent infinite height issue
           SizedBox(
             height: MediaQuery.of(context).size.width *
-                0.6, // Adjust this as needed
-            // child: ListView(
-            //   scrollDirection: Axis.horizontal,
-            //   physics: BouncingScrollPhysics(),
-            //   children: [
-            //     CareerCard(),
-            //     CareerCard(),
-            //     CareerCard(),
-            //   ],
-            // ),
+                0.5, // Adjust this as needed
             child: ListView.builder(
               itemCount: careers.length,
               physics: BouncingScrollPhysics(),

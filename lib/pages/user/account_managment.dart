@@ -24,7 +24,7 @@ class _AccountManagmentState extends ConsumerState<AccountManagment> {
         body: Stack(
       children: [
         Positioned(
-          top: 90,
+          top: (MediaQuery.of(context).size.width * 0.35),
           left: 0,
           right: 0,
           child: Row(
@@ -43,7 +43,7 @@ class _AccountManagmentState extends ConsumerState<AccountManagment> {
           ),
         ),
         Positioned(
-          top: (MediaQuery.of(context).size.width * 0.9) + 50,
+          top: (MediaQuery.of(context).size.width) + 50,
           left: 0,
           right: 0,
           bottom: 0,

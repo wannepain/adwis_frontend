@@ -15,7 +15,7 @@ import 'package:adwis_frontend/pages/user/user_buton.dart';
 
 class Homepage extends ConsumerStatefulWidget {
   bool forceOpenAuth;
-  final int stage;
+  final int? stage;
   Homepage({super.key, this.forceOpenAuth = false, required this.stage});
 
   @override

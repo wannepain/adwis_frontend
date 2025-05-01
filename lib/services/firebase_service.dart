@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:adwis_frontend/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class FirebaseService {
   Future<void> inicializeFirebase() async {
@@ -52,5 +53,13 @@ class FirebaseService {
       print(e);
       return null;
     }
+  }
+
+  Future<void> initNotifications() async {
+    final _firebaseMessages = FirebaseMessaging.instance;
+    await _firebaseMessages.requestPermission();
+    String? token = await _firebaseMessages.getToken();
+    print("FCM Token: $token");
+    // save token to database
   }
 }

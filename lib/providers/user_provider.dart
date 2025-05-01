@@ -10,21 +10,27 @@ class UserNotifier extends StateNotifier<Map> {
             "email": null,
             "displayName": null,
             "photoURL": null,
-            "isUnlimited": true,
+            "isUnlimited": false,
             "subscriptionData": null,
             "purhcaseToken": null,
           },
         );
   Future<void> signInWithGoogle() async {
     Map userData = await AuthService().singInGoogle();
-
     state = userData;
   }
 
   Future<void> getUserDataNoUpdate() async {
     Map userData = await AuthService().getUserData();
-
+    print(userData);
     state = {...userData, "subscriptionData": state["subscriptionData"]};
+  }
+
+  void setUnlimited({required unlimited}) {
+    state = {
+      ...state,
+      "isUnlimited": unlimited,
+    };
   }
 
   Future<void> getUserData() async {
@@ -64,7 +70,7 @@ class UserNotifier extends StateNotifier<Map> {
       "email": null,
       "displayName": null,
       "photoURL": null,
-      "isUnlimited": true,
+      "isUnlimited": false,
       "subscriptionData": null,
       "purhcaseToken": null,
     };

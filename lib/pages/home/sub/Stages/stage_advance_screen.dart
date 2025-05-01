@@ -26,7 +26,7 @@ class _StageAdvanceScreenState extends ConsumerState<StageAdvanceScreen>
 
   void onTap(isUnlimited) async {
     print("isunlimited :$isUnlimited");
-    if (true) {
+    if (isUnlimited) {
       await ref.read(stagesProvider.notifier).set();
       Navigator.pushNamed(
         context,
