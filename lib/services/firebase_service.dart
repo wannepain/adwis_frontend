@@ -55,11 +55,12 @@ class FirebaseService {
     }
   }
 
-  Future<void> initNotifications() async {
-    final _firebaseMessages = FirebaseMessaging.instance;
-    await _firebaseMessages.requestPermission();
-    String? token = await _firebaseMessages.getToken();
-    print("FCM Token: $token");
-    // save token to database
-  }
+  // Future<void> initNotifications() async {
+  //   final _firebaseMessages = FirebaseMessaging.instance;
+  //   await _firebaseMessages.requestPermission();
+  //   String? token = await _firebaseMessages.getToken();
+  //   print("FCM Token: $token");
+
+  //   // save token to database
+  // }
 }

@@ -14,7 +14,7 @@ class AuthService {
     );
     final user = await FirebaseService().signInWithCredential(credential);
 
-    await FirebaseService().initNotifications();
+    // await FirebaseService().initNotifications();
 
     print(user);
     return {
