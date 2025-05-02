@@ -55,12 +55,21 @@ class FirebaseService {
     }
   }
 
-  // Future<void> initNotifications() async {
-  //   final _firebaseMessages = FirebaseMessaging.instance;
-  //   await _firebaseMessages.requestPermission();
-  //   String? token = await _firebaseMessages.getToken();
-  //   print("FCM Token: $token");
+  Future<void> initNotifications({required String uid}) async {
+    final _firebaseMessages = FirebaseMessaging.instance;
 
-  //   // save token to database
-  // }
+    await _firebaseMessages.requestPermission();
+
+    String? token = await _firebaseMessages.getToken();
+    print("\n\n\n FCM Token: \n\n\n $token");
+
+    if (token != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .set({'fcm_token': token}, SetOptions(merge: true));
+    } else {
+      print('FCM token is null. Notification permission may be denied.');
+    }
+  }
 }

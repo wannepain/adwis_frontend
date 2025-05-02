@@ -49,32 +49,6 @@ class _AppState extends ConsumerState<App> {
     final isAuth = userData["uid"] != null;
     final isUnlimited = userData["isUnlimited"];
     final currentStage = ref.watch(stagesProvider)["current_stage"];
-    // return MaterialApp(
-    //   title: 'Adwis',
-    //   scaffoldMessengerKey: widget.snackBarKey,
-    //   navigatorKey: navigatorKey,
-    //   navigatorObservers: [SnackBarDismissObserver()],
-    //   home: Homepage(
-    //     stage: currentStage,
-    //   ),
-    //   routes: {
-    //     "/homepage": (context) => Homepage(
-    //           stage: currentStage,
-    //         ),
-    //     // "/homepage/2": (context) => Homepage(
-    //     //       stage: 2,
-    //     //     ),
-    //     // "/homepage/3": (context) => Homepage(
-    //     //       stage: 3,
-    //     // ),
-    //     "/congratulations": (context) => StageAdvanceScreen(),
-    //     "/auth": (context) => isAuth ? AccountManagment() : AuthScreen(),
-    //     "/unlimited": (context) =>
-    //         isUnlimited ? AccountManagment() : GoUnlimited(),
-    //     "/speech": (context) =>
-    //         MainSpeech(), //only for unlimited users, add a check here
-    //   },
-    // );
     return MaterialApp(
       initialRoute: '/homepage',
       onGenerateRoute: (settings) {

@@ -1,8 +1,8 @@
 import "package:dio/dio.dart";
 
 class ChatbotService {
-  // final url = "https://adwisbackend-563539782861.us-central1.run.app";
-  final url = "https://58d7-45-84-122-40.ngrok-free.app";
+  final url = "https://adwisbackend-563539782861.us-central1.run.app";
+  // final url = "https://58d7-45-84-122-40.ngrok-free.app";
   final dio = Dio();
 
   ChatbotService();
